@@ -1,6 +1,6 @@
-#Placeholder Programming Documentation
+# Placeholder Programming Documentation
 
-##Operating System
+## Operating System
 
 Server will be a Raspberry Pi 3, running Ubuntu 18.04.3 LTS.
 
@@ -8,7 +8,7 @@ Micro-controllers will be ESP32's, transmitting data over MQTT.
 
 Client will be able to access a web page to log in and view data.
 
-##Data Stream
+## Data Stream
 
 Data will be sent from ESP32 onto MQTT broker in a JSON format at least every 1s. 
 
