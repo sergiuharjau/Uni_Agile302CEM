@@ -1,0 +1,25 @@
+
+<!doctype html>
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Home Page</title>
+		<meta name="description" content="form to add new books">
+		<meta name="author" content="Mark Tyers">
+		<link href="style.css" type="text/css" rel="stylesheet" />
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script>
+			const connection = new WebSocket('ws://localhost:3000');
+
+			connection.onmessage = function (event) {
+				$('#message').append(`<li>${event.data}</li>`)
+			}
+		</script>
+	</head>
+	<body>
+		<h1>Mqtt over Sockets</h1>
+		<ul id="message">
+		
+		</ul>
+</html>
