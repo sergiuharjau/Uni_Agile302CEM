@@ -24,14 +24,24 @@ module.exports = class User {
 	}
 
 	async getAllSensorData() {
-		return this.getConnection()
-		.then(function(db) {
-			var dbo = db.db("smarthome");
-			return dbo.collection("data")
-						.find({})
-						.toArray()
-						.then(db.close())
-		})
+		var db = await this.getConnection()
+		var dbo = db.db("smarthome");
+		return dbo.collection("data")
+					.find({})
+					.toArray()
+					.then(db.close())
+	}
+
+	async getDaysData(daysToReturn) {
+		var db = await this.getConnection()
+		var dbo = db.db("smarthome");
+		
+		var startDate = new Date(new Date(new Date().setTime( new Date().getTime() - daysToReturn * 86400000 )).setHours(1,0,0,0));
+		var endDate = new Date(new Date().setHours(24,59,59,999))
+		return dbo.collection("data")
+					.find({dateRecorded: {$gte: startDate, $lt: endDate}})
+					.toArray()
+					.then(db.close())
 	}
 
 	async insertSensorData(JSON) {
