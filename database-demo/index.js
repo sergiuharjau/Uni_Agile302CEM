@@ -15,9 +15,9 @@ async function getAllData () {
 	})
 }
 
-async function getDaysData(daysToReturn) {
+async function getHistoricData(daysToReturn) {
 	var database = await new Database();
-	await database.getDaysData(daysToReturn)
+	await database.getHistoricData(daysToReturn)
 	.then( data => {
 		data.forEach(element => {
 		console.log("Date object created in Mongo: " + element._id.getTimestamp())
@@ -45,4 +45,4 @@ async function insertSensorData () {
 //Comment out the appropriate lines
 getAllData()
 insertSensorData()
-getDaysData()
+getHistoricData()

@@ -32,7 +32,7 @@ module.exports = class User {
 					.then(db.close())
 	}
 
-	async getDaysData(daysToReturn = 0) {
+	async getHistoricData(daysToReturn = 0) {
 		var db = await this.getConnection()
 		var dbo = db.db("smarthome");
 
