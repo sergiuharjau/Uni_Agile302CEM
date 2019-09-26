@@ -3,31 +3,24 @@ const Database = require("./modules/Database")
 async function getAllData () {
 	var database = await new Database();
 	await database.getAllSensorData()
-	.then( data => {
-		data.forEach(element => {
-		console.log("Date object created in Mongo: " + element._id.getTimestamp())
-		console.log("Sensor Name is " + element.sensorName)
-		console.log("Location: " + element.location)
-		console.log("Value recorded: " + element.value.toString())
-		console.log("Date value was recorded: " + element.dateRecorded)
-		console.log("*******************************")
-		});
-	})
+	.then( printData)
 }
 
 async function getHistoricData(daysToReturn) {
 	var database = await new Database();
 	await database.getHistoricData(daysToReturn)
-	.then( data => {
-		data.forEach(element => {
+	.then( printData)
+}
+
+async function printData (JSONData) {
+	JSONData.forEach(element => {
 		console.log("Date object created in Mongo: " + element._id.getTimestamp())
 		console.log("Sensor Name is " + element.sensorName)
 		console.log("Location: " + element.location)
 		console.log("Value recorded: " + element.value.toString())
 		console.log("Date value was recorded: " + element.dateRecorded)
 		console.log("*******************************")
-		});
-	})
+	});
 }
 
 async function insertSensorData () {
