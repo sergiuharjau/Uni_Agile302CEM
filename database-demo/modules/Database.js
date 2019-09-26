@@ -9,7 +9,7 @@ module.exports = class User {
 		})()
 	}
 
-	async test() {
+	async getAllSensorData() {
     return this.MongoClient.connect(this.url,{ useUnifiedTopology: true, useNewUrlParser: true })
       .then(function(db) {
         var dbo = db.db("smarthome");
