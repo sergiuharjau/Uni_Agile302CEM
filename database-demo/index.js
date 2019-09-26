@@ -15,7 +15,7 @@ async function getAllData () {
 	})
 }
 
-async function getDaysData(daysToReturn = 0) {
+async function getDaysData(daysToReturn) {
 	var database = await new Database();
 	await database.getDaysData(daysToReturn)
 	.then( data => {
@@ -45,5 +45,4 @@ async function insertSensorData () {
 //Comment out the appropriate lines
 getAllData()
 insertSensorData()
-getDaysData(1)
-getDaysData(0)
+getDaysData()
