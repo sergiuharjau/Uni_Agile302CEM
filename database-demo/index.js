@@ -5,11 +5,11 @@ async function getAllData () {
 	await database.getAllSensorData()
 	.then( data => {
 		data.forEach(element => {
-		console.log(element._id.getTimestamp())
-		console.log(element.sensorName)
-		console.log(element.location)
-		console.log(element.value.toString())
-		console.log(element.dateRecorded)
+		console.log("Date object created in Mongo: " + element._id.getTimestamp())
+		console.log("Sensor Name is " + element.sensorName)
+		console.log("Location: " + element.location)
+		console.log("Value recorded: " + element.value.toString())
+		console.log("Date value was recorded: " + element.dateRecorded)
 		console.log("*******************************")
 		});
 	})
