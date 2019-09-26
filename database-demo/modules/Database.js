@@ -2,15 +2,29 @@
 
 module.exports = class User {
 	constructor() {
-		return (async() => {
-      this.MongoClient = require('mongodb').MongoClient;
-      this.url = "mongodb://localhost:27017/smarthome";
-			return this
-		})()
+		return new Promise((resolve, reject) => {
+      try {
+        this.MongoClient = require('mongodb').MongoClient;
+        this.url = "mongodb://localhost:27017/smarthome";
+        resolve(this)
+      } catch (err) {
+        reject(err)
+      }
+    })
 	}
 
+  async getConnection() {
+    return new Promise((resolve, reject) => {
+      try {
+        resolve(this.MongoClient.connect(this.url,{ useUnifiedTopology: true, useNewUrlParser: true }))
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
 	async getAllSensorData() {
-    return this.MongoClient.connect(this.url,{ useUnifiedTopology: true, useNewUrlParser: true })
+    return this.getConnection()
       .then(function(db) {
         var dbo = db.db("smarthome");
         return dbo.collection("data")
@@ -21,7 +35,7 @@ module.exports = class User {
   }
 
   async insertSensorData(JSON) {
-    return this.MongoClient.connect(this.url,{ useUnifiedTopology: true, useNewUrlParser: true })
+    return this.getConnection()
       .then(function(db) {
         var dbo = db.db("smarthome");
         dbo.collection("data").insertOne(JSON, function(err, res) {
