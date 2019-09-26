@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "eslint": "^6.4.0",
     "mongodb": "^3.3.2"
   }
 }
