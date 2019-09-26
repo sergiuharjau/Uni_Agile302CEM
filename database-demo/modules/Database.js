@@ -35,11 +35,12 @@ module.exports = class User {
 	async getDaysData(daysToReturn) {
 		var db = await this.getConnection()
 		var dbo = db.db("smarthome");
-		
+
 		var startDate = new Date(new Date(new Date().setTime( new Date().getTime() - daysToReturn * 86400000 )).setHours(1,0,0,0));
 		var endDate = new Date(new Date().setHours(24,59,59,999))
+		
 		return dbo.collection("data")
-					.find({dateRecorded: {$gte: startDate, $lt: endDate}})
+					.find({dateRecorded: {$gte: startDate, $lte: endDate}})
 					.toArray()
 					.then(db.close())
 	}

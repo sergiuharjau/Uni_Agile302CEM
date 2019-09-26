@@ -41,6 +41,9 @@ async function insertSensorData () {
 	await database.insertSensorData(exampleJSON)
 }
 
+
+//Comment out the appropriate lines
 getAllData()
 insertSensorData()
 getDaysData(1)
+getDaysData(0)
