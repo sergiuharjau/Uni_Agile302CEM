@@ -2,7 +2,7 @@ const Database = require("./modules/Database")
 
 async function getAllData () {
   var database = await new Database();
-  database.getAllSensorData().then( data => {
+  await database.getAllSensorData().then( data => {
     data.forEach(element => {
       console.log(element._id.getTimestamp())
       console.log(element.sensorName)
@@ -14,4 +14,16 @@ async function getAllData () {
   })
 }
 
+async function insertSensorData () {
+  var database = await new Database();
+  var exampleJSON = {
+    sensorName: "temp-2",
+    location: "Lounge",
+    value: 16,
+    dateRecorded: new Date()
+  }
+  await database.insertSensorData(exampleJSON)
+}
+
 getAllData()
+insertSensorData()
