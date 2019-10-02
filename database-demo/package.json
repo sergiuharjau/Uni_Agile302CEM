@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "eslint": "^6.4.0",
-    "mongodb": "^3.3.2"
+    "mongodb": "^3.3.2",
+    "sqlite-async": "^1.0.12"
   }
 }
