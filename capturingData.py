@@ -1,4 +1,6 @@
 import paho.mqtt.client as mqtt #import the client1
+import sqlite3
+from sqlite3 import Error
 global db 
 
 def on_message(client, userdata, msg):
@@ -32,5 +34,9 @@ def runMQTT():
 
 if __name__ == "__main__":
     global db 
-    #db = sqlite3.connect("pathToFile")
+    try:
+        db = sqlite3.connect("pathToFile")
+    except Error as e:
+        raise(e)
+ 
     runMQTT() # this runs forever
