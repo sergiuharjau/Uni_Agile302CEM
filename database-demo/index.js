@@ -1,41 +1,23 @@
-const Database = require("./modules/Database")
+const Database = require("./modules/database")
 
 async function getAllData () {
-	var database = await new Database();
-	await database.getAllSensorData()
-	.then( printData)
+	var database = await new Database('./database/smart_home.db')
+	var data = await database.getAllSensorData()
+	await PrintData(data)
 }
 
-async function getHistoricData(daysToReturn) {
-	var database = await new Database();
-	await database.getHistoricData(daysToReturn)
-	.then( printData)
-}
-
-async function printData (JSONData) {
+async function PrintData (JSONData) {
 	JSONData.forEach(element => {
-		console.log("Date object created in Mongo: " + element._id.getTimestamp())
 		console.log("Sensor Name is " + element.sensorName)
 		console.log("Location: " + element.location)
 		console.log("Value recorded: " + element.value.toString())
 		console.log("Date value was recorded: " + element.dateRecorded)
+		console.log("Date row created in sqlite: " + element.dateCreated)
 		console.log("*******************************")
 	});
 }
 
-async function insertSensorData () {
-	var database = await new Database();
-	var exampleJSON = {
-		sensorName: "temp-2",
-		location: "Lounge",
-		value: 16,
-		dateRecorded: new Date()
-	}
-	await database.insertSensorData(exampleJSON)
-}
+getAllData();
 
 
 //Comment out the appropriate lines
-getAllData()
-insertSensorData()
-getHistoricData()
