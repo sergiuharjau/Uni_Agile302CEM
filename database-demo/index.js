@@ -23,8 +23,5 @@ async function PrintData (JSONData) {
 	});
 }
 
-getAllData();
+// getAllData();
 getHistoricData(1);
-
-
-//Comment out the appropriate lines
