@@ -19,7 +19,6 @@ async function PrintData (JSONData) {
 		console.log("Location: " + element.location)
 		console.log("Value recorded: " + element.value.toString())
 		console.log("Date value was recorded: " + element.dateRecorded)
-		console.log("Date row created in sqlite: " + element.dateCreated)
 		console.log("*******************************")
 	});
 }
