@@ -1,7 +1,8 @@
 const Database = require("./modules/database")
+const databasePath = './database/smart_home.db'
 
 async function getAllData () {
-	var database = await new Database('./database/smart_home.db')
+	var database = await new Database(databasePath)
 	var data = await database.getAllSensorData()
 	await PrintData(data)
 }
