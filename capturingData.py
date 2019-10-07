@@ -8,10 +8,10 @@ def on_message(client, userdata, msg):
     #insertIntoSQL(msg.payload)
 
 def insertIntoSQL(data):
-    sql = ''' INSERT INTO data(sensorname, location, value, dateRecorded)
+    sql = ''' INSERT INTO data(sensorname, value, dateCreated)
               VALUES(?,?,?,?) '''
     cur = db.cursor()
-    cur.execute(sql, data["label"], data["location"], data["value"], data["time"])
+    cur.execute(sql, data["label"], data["value"], data["time"])
 
 def runMQTT():
     broker_address = "mqtt.coventry.ac.uk" 
@@ -28,14 +28,14 @@ def runMQTT():
     client.tls_set("/home/serge/mqtt.crt")
     client.connect(broker_address, broker_port) #connect to broker
 
-    client.subscribe("302CEM/placeholder/#")
+    client.subscribe("302CEM/placeholder/sensors/#")
 
     client.loop_forever()
 
 if __name__ == "__main__":
     global db 
     try:
-        db = sqlite3.connect("pathToFile")
+        db = sqlite3.connect("../database/smart_home.db")
     except Error as e:
         raise(e)
  
