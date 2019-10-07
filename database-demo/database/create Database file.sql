@@ -1,8 +1,3 @@
---
--- File generated with SQLiteStudio v3.2.1 on Mon Oct 7 12:34:03 2019
---
--- Text encoding used: System
---
 PRAGMA foreign_keys = off;
 BEGIN TRANSACTION;
 
@@ -13,7 +8,7 @@ CREATE TABLE data (
     sensorName   VARCHAR (32) NOT NULL
                               CONSTRAINT FK_Sensors_data REFERENCES sensors (sensorName),
     value        VARCHAR (8)  NOT NULL ON CONFLICT ROLLBACK,
-    dateRecorded DATETIME     NOT NULL ON CONFLICT ROLLBACK,
+    dateRecorded VARCHAR (32) NOT NULL,
     dateCreated  DATETIME     DEFAULT (CURRENT_TIMESTAMP),
     PRIMARY KEY (
         sensorName,
