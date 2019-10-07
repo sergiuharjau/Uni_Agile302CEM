@@ -1,48 +1,27 @@
 'use strict'
+const sqlite = require('sqlite-async')
 
-module.exports = class User {
-	constructor() {
-		return new Promise((resolve, reject) => {
-			try {
-				this.MongoClient = require('mongodb').MongoClient;
-				this.url = "mongodb://localhost:27017/smarthome";
-				resolve(this)
-			} catch (err) {
-				reject(err)
+module.exports = class database {
+	constructor(dbName=':memory:') {
+		return (async() => {
+			this.db = await sqlite.open(dbName);
+			if (dbName === ':memory:') {
+				console.log("data in memory")
+				//TODO: Insert script to create database from scratch
+				const sql = 'PRAGMA foreign_keys = off; BEGIN TRANSACTION;  DROP TABLE IF EXISTS data;  CREATE TABLE data (     sensorName   VARCHAR (32) NOT NULL,     location     VARCHAR (32) NOT NULL ON CONFLICT ROLLBACK,     value        VARCHAR (8)  NOT NULL ON CONFLICT ROLLBACK,     dateRecorded DATETIME     NOT NULL ON CONFLICT ROLLBACK,     dateCreated  DATETIME     DEFAULT (CURRENT_TIMESTAMP),     PRIMARY KEY (         sensorName,         dateRecorded     ) );   COMMIT TRANSACTION; PRAGMA foreign_keys = on; '
+				await this.db.run(sql)
 			}
-		})
-	}
-
-	async getConnection() {
-		return new Promise((resolve, reject) => {
-			try {
-				resolve(this.MongoClient.connect(this.url,{ useUnifiedTopology: true, useNewUrlParser: true }))
-			} catch (error) {
-				reject(error)
-			}
-		})
+			return this
+		})()
 	}
 
 	async getAllSensorData() {
-		var db = await this.getConnection()
-		var dbo = db.db("smarthome");
-		return dbo.collection("data")
-					.find({})
-					.toArray()
-					.then(db.close())
-	}
-
-	async getHistoricData(daysToReturn = 0) {
-		var db = await this.getConnection()
-		var dbo = db.db("smarthome");
-
-		var startDate = new Date(new Date(new Date().setTime( new Date().getTime() - daysToReturn * 86400000 )).setHours(1,0,0,0));
-		var endDate = new Date(new Date().setHours(24,59,59,999))
-
-		return dbo.collection("data")
-					.find({dateRecorded: {$gte: startDate, $lte: endDate}})
-					.toArray()
-					.then(db.close())
+		try {
+			var sql = `SELECT * FROM data;`
+			return await this.db.all(sql)
+		} catch (err){
+			return err
+		}
 	}
 
 	async insertSensorData(JSON) {
