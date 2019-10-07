@@ -24,15 +24,12 @@ module.exports = class database {
 		}
 	}
 
-	async insertSensorData(JSON) {
-		return this.getConnection()
-			.then(function(db) {
-				var dbo = db.db("smarthome");
-				dbo.collection("data").insertOne(JSON, function(err, res) {
-					if (err) throw err;
-					console.log("1 document inserted");
-					db.close();
-				});
-			})
+	async getHistoricData(daysToReturn) {
+		try {
+			var sql = `SELECT * FROM data WHERE dateRecorded BETWEEN DATETIME('now', '-${daysToReturn} days') and DATETIME('now');`
+			return await this.db.all(sql)
+		} catch (err){
+			return err
+		}
 	}
 }

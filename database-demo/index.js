@@ -7,6 +7,12 @@ async function getAllData () {
 	await PrintData(data)
 }
 
+async function getHistoricData (daysToReturn) {
+	var database = await new Database(databasePath)
+	var data = await database.getHistoricData(daysToReturn)
+	await PrintData(data)
+}
+
 async function PrintData (JSONData) {
 	JSONData.forEach(element => {
 		console.log("Sensor Name is " + element.sensorName)
@@ -19,6 +25,7 @@ async function PrintData (JSONData) {
 }
 
 getAllData();
+getHistoricData(1);
 
 
 //Comment out the appropriate lines
