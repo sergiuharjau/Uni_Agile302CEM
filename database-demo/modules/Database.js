@@ -26,7 +26,7 @@ module.exports = class database {
 
 	async getHistoricData(daysToReturn) {
 		try {
-			var sql = `SELECT s.sensorName, s.location, d.value, d.dateRecorded FROM data d, sensors s WHERE dateRecorded BETWEEN DATETIME('now', '-${daysToReturn} days') and DATETIME('now');`
+			var sql = `SELECT s.sensorName , s.location, d.value, d.dateRecorded FROM data d, sensors s WHERE s.sensorName = d.sensorName AND DATE(d.dateRecorded) BETWEEN DATE('now', '-${daysToReturn} days') and DATE('now')`
 			return await this.db.all(sql)
 		} catch (err){
 			return err
