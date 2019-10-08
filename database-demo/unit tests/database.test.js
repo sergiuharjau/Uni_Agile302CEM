@@ -32,7 +32,6 @@ async function insertFakeData(db) {
     });
     
     for await (const line of rl) {
-        // console.log(line)
         await db.insertData(line)
     }
 }
