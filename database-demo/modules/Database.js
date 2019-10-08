@@ -32,4 +32,13 @@ module.exports = class database {
 			return err
 		}
 	}
+
+	async getTodaysData() {
+		try {
+			var sql = `SELECT s.sensorName , s.location, d.value, d.dateRecorded FROM data d, sensors s WHERE s.sensorName = d.sensorName AND DATE(d.dateRecorded) = DATE('now')`
+			return await this.db.all(sql)
+		} catch (err){
+			return err
+		}
+	}
 }
