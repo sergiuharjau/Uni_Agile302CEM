@@ -7,6 +7,12 @@ async function getAllData () {
 	await PrintData(data)
 }
 
+async function getTodaysData () {
+	var database = await new Database(databasePath)
+	var data = await database.getTodaysData()
+	await PrintData(data)
+}
+
 async function getHistoricData (daysToReturn) {
 	var database = await new Database(databasePath)
 	var data = await database.getHistoricData(daysToReturn)
