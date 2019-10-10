@@ -31,9 +31,12 @@ module.exports = class database {
 		}
 	}
 
-	async getHistoricData(daysToReturn) {
+	async getRangeData(startDate, endDate) {
 		try {
-			var sql = `SELECT s.sensorName , s.location, d.value, d.dateRecorded FROM data d, sensors s WHERE s.sensorName = d.sensorName AND DATE(d.dateRecorded) BETWEEN DATE('now', '-${daysToReturn} days') and DATE('now')`
+			const searchStartDate = await getDateFormat(startDate)
+			const searchEndDate= await getDateFormat(endDate)
+			var sql = `SELECT s.sensorName, s.location, d.value, d.dateRecorded FROM data d, sensors s WHERE s.sensorName = d.sensorName AND d.dateRecorded BETWEEN '${searchStartDate}' AND '${searchEndDate}';`
+			console.log(sql)
 			return await this.db.all(sql)
 		} catch (err){
 			return err
@@ -48,4 +51,7 @@ module.exports = class database {
 			return err
 		}
 	}
+
+}
+
 }
