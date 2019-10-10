@@ -67,4 +67,6 @@ async function getDateFormat(date){
 	return year+'-'+month+'-'+day+' '+hour+':'+minutes+':'+seconds
 }
 
+async function formatDatePart(component){
+	return component.toString().padStart(2,'0')
 }
