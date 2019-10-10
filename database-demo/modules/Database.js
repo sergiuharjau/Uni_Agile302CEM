@@ -54,4 +54,17 @@ module.exports = class database {
 
 }
 
+async function getDateFormat(date){
+	new Date().getMonth()
+	const year = date.getFullYear()
+	const month = await formatDatePart(date.getMonth())
+	const day = await formatDatePart(date.getDate())
+
+	const hour = await formatDatePart(date.getHours())
+	const minutes = await formatDatePart(date.getMinutes())
+	const seconds = await formatDatePart(date.getSeconds())
+
+	return year+'-'+month+'-'+day+' '+hour+':'+minutes+':'+seconds
+}
+
 }
