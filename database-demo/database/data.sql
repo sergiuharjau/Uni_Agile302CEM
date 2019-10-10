@@ -1,3 +1,6 @@
+insert into sensors(sensorName, type, location) values ('temp1', 'Temperature', 'Kitchen');
+insert into sensors(sensorName, type, location) values ('temp2', 'Temperature', 'Lounge');
+insert into sensors(sensorName, type, location) values ('temp3', 'Temperature', 'Master Bedroom');
 insert into data (sensorName, value, dateRecorded, dateCreated) values ('temp2', 12, '2019-08-10 01:23:04', '2019-10-07 00:00:00');
 insert into data (sensorName, value, dateRecorded, dateCreated) values ('temp1', 20, '2019-07-16 04:05:20', '2019-10-07 00:00:00');
 insert into data (sensorName, value, dateRecorded, dateCreated) values ('temp3', 23, '2019-07-04 04:07:36', '2019-10-07 00:00:00');
@@ -993,8 +996,8 @@ insert into data (sensorName, value, dateRecorded, dateCreated) values ('temp1',
 insert into data (sensorName, value, dateRecorded, dateCreated) values ('temp2', 29, '2019-08-22 09:19:52', '2019-10-07 00:00:00');
 insert into data (sensorName, value, dateRecorded, dateCreated) values ('temp1', 2, '2019-07-01 19:58:53', '2019-10-07 00:00:00');
 insert into data (sensorName, value, dateRecorded, dateCreated) values ('temp1', 9, '2019-09-09 23:26:56', '2019-10-07 00:00:00');
+insert into data (sensorName, value, dateRecorded, dateCreated) values ('temp1', 25, '2019-08-02 15:40:21', '2019-10-07 00:00:00');
 insert into data (sensorName, value, dateRecorded, dateCreated) values ('temp3', 19, '2019-08-26 14:57:32', '2019-10-07 00:00:00');
 insert into data (sensorName, value, dateRecorded, dateCreated) values ('temp1', 29, '2019-08-31 20:53:14', '2019-10-07 00:00:00');
-insert into data (sensorName, value, dateRecorded, dateCreated) values ('temp3', 29, '2019-07-17 17:55:21', '2019-10-07 00:00:00');
-insert into data (sensorName, value, dateRecorded, dateCreated) values ('temp1', 25, '2019-08-02 15:40:21', '2019-10-07 00:00:00');
 insert into data (sensorName, value, dateRecorded, dateCreated) values ('temp2', 4, '2019-07-26 01:40:25', '2019-10-07 00:00:00');
+insert into data (sensorName, value, dateRecorded, dateCreated) values ('temp3', 29, '2019-07-17 17:55:21', '2019-10-07 00:00:00');
