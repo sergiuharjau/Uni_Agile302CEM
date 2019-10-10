@@ -13,9 +13,9 @@ async function getTodaysData () {
 	await PrintData(data)
 }
 
-async function getHistoricData (daysToReturn) {
+async function getDataRange (startDate,endDate) {
 	var database = await new Database(databasePath)
-	var data = await database.getHistoricData(daysToReturn)
+	var data = await database.getRangeData(startDate,endDate)
 	await PrintData(data)
 }
 
@@ -30,4 +30,7 @@ async function PrintData (JSONData) {
 }
 
 // getAllData();
-getHistoricData(1);//test commit
+// getTodaysData();
+const date = new Date(2019,09,01,00,00,00,00);
+const todaysDate = new Date();
+getDataRange(date, todaysDate)
