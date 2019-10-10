@@ -30,4 +30,4 @@ async function PrintData (JSONData) {
 }
 
 // getAllData();
-getHistoricData(1);
+getHistoricData(1);//test commit
