@@ -84,6 +84,26 @@ module.exports = class database {
 		}
 	}
 
+	async getStatistics(sensorName, startDate, endDate) {
+		try {
+			const searchStartDate = await getDateFormat(startDate)
+			const searchEndDate= await getDateFormat(endDate)
+			const sql = `SELECT s.sensorName
+							, s.location
+							, MIN(d.value)
+							, AVG(d.value)
+							, MAX(d.value)
+						FROM data d
+							INNER JOIN sensors s on s.sensorName = d.sensorName
+						WHERE (${sensorName} IS NULL OR s.sensorName = ${sensorName})
+							AND ((${searchStartDate} IS NULL OR ${searchEndDate} IS NULL) OR d.dateRecorded BETWEEN ${searchStartDate} AND ${searchEndDate})
+						GROUP BY s.sensorName;`
+			return await this.db.all(sql)
+		} catch (err){
+			return err
+		}
+	}
+
 }
 
 async function getDateFormat(date){
