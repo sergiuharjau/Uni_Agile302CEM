@@ -24,7 +24,27 @@ module.exports = class database {
 
 	async getAllSensorData() {
 		try {
-			var sql = `SELECT s.sensorName, s.location, d.value, d.dateRecorded FROM sensors s, data d WHERE d.sensorName = s.sensorName`
+			var sql = `SELECT s.sensorName
+							, s.location
+							, d.value
+							, d.dateRecorded 
+						FROM data d
+							INNER JOIN sensors s on s.sensorName = d.sensorName;`
+			return await this.db.all(sql)
+		} catch (err){
+			return err
+		}
+	}
+
+	async latestReading() {
+		try {
+			var sql = `SELECT s.sensorName
+							, s.location
+							, d.value
+							, d.dateRecorded 
+						FROM data d
+							INNER JOIN sensors s on s.sensorName = d.sensorName
+						ORDER BY d.dateCreated Desc,d.ROWID ASC LIMIT 1;`
 			return await this.db.all(sql)
 		} catch (err){
 			return err
@@ -35,8 +55,14 @@ module.exports = class database {
 		try {
 			const searchStartDate = await getDateFormat(startDate)
 			const searchEndDate= await getDateFormat(endDate)
-			var sql = `SELECT s.sensorName, s.location, d.value, d.dateRecorded FROM data d, sensors s WHERE s.sensorName = d.sensorName AND d.dateRecorded BETWEEN '${searchStartDate}' AND '${searchEndDate}';`
-			console.log(sql)
+			var sql = `SELECT s.sensorName
+							, s.location
+							, d.value
+							, d.dateRecorded
+						FROM data d,
+							INNER JOIN sensors s on s.sensorName = d.sensorName
+						WHERE d.dateRecorded BETWEEN '${searchStartDate}' AND '${searchEndDate}';`
+									console.log(sql)
 			return await this.db.all(sql)
 		} catch (err){
 			return err
@@ -45,7 +71,13 @@ module.exports = class database {
 
 	async getTodaysData() {
 		try {
-			var sql = `SELECT s.sensorName , s.location, d.value, d.dateRecorded FROM data d, sensors s WHERE s.sensorName = d.sensorName AND DATE(d.dateRecorded) = DATE('now')`
+			var sql = `SELECT s.sensorName 
+							, s.location
+							, d.value
+							, d.dateRecorded 
+						FROM data d
+							INNER JOIN sensors s on s.sensorName = d.sensorName
+						WHERE DATE(d.dateRecorded) = DATE('now');`
 			return await this.db.all(sql)
 		} catch (err){
 			return err
