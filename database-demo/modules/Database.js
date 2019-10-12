@@ -24,7 +24,7 @@ module.exports = class database {
 
 	async getAllSensorData() {
 		try {
-			var sql = `SELECT s.sensorName
+			const sql = `SELECT s.sensorName
 							, s.location
 							, d.value
 							, d.dateRecorded 
@@ -38,7 +38,7 @@ module.exports = class database {
 
 	async latestReading() {
 		try {
-			var sql = `SELECT s.sensorName
+			const sql = `SELECT s.sensorName
 							, s.location
 							, d.value
 							, d.dateRecorded 
@@ -55,7 +55,7 @@ module.exports = class database {
 		try {
 			const searchStartDate = await getDateFormat(startDate)
 			const searchEndDate= await getDateFormat(endDate)
-			var sql = `SELECT s.sensorName
+			const sql = `SELECT s.sensorName
 							, s.location
 							, d.value
 							, d.dateRecorded
@@ -71,7 +71,7 @@ module.exports = class database {
 
 	async getTodaysData() {
 		try {
-			var sql = `SELECT s.sensorName 
+			const sql = `SELECT s.sensorName 
 							, s.location
 							, d.value
 							, d.dateRecorded 
