@@ -36,6 +36,16 @@ module.exports = class database {
 		}
 	}
 
+	async insertData(line, testing = false) {
+		try {
+			if (testing === false) throw new Error("This is for testing only.")
+			const sql = line;
+			return await this.db.all(sql)
+		} catch (err){
+			return err
+		}
+	}
+
 	async latestReading() {
 		try {
 			const sql = `SELECT s.sensorName

@@ -31,7 +31,9 @@ async function insertFakeData(db) {
         crlfDelay: Infinity
     });
     
+    const testing = true;
+
     for await (const line of rl) {
-        await db.insertData(line)
+        await db.insertData(line, testing)
     }
 }
