@@ -19,6 +19,14 @@ describe('register()', () => {
         const data = await this.db.getAllSensorData()
         expect(data.length).toBe(1000)
         done()
+    })
+    
+    test('database can insert a new record', async done => {
+        expect.assertions(1)
+        //TODO: Call python script
+        const data = await this.db.getAllSensorData()
+        expect(data.length).toBe(1001)
+        done()
 	})
 
 })
