@@ -43,7 +43,7 @@ def runMQTT():
 if __name__ == "__main__":
     global db
     try:
-        db = sqlite3.connect("../../Documents/database-demo/database/smart_home.db")
+        db = sqlite3.connect("/home/pi/Documents/AgilePlaceholder/database-demo/database/smart_home.db")
         print("No errors.")
     except Error as e:
         raise(e)
