@@ -36,7 +36,7 @@ def runMQTT():
     client.tls_set("/home/pi/Downloads/mqtt.crt")
     client.connect(broker_address, broker_port) #connect to broker
 
-    client.subscribe("302CEM/placeholder/message/#")
+    client.subscribe("302CEM/placeholder/sensors/#")
 
     client.loop_forever()
 
