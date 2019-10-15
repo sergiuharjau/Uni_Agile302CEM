@@ -43,7 +43,7 @@ async function PrintData (JSONData) {
 	});
 }
 
-// getAllData()
+getAllData()
 
 // getTodaysData()
 
@@ -53,4 +53,4 @@ async function PrintData (JSONData) {
 
 // latestReading();
 
-getStatistics();
+// getStatistics();
