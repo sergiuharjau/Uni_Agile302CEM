@@ -6,6 +6,8 @@ const readline = require('readline');
 const Database = require("../modules/Database")
 const dataPath = './database/data.sql'
 
+const exec = require("../modules/execute")
+
 describe('register()', () => {
     this.db
 
@@ -24,6 +26,7 @@ describe('register()', () => {
     test('database can insert a new record', async done => {
         expect.assertions(1)
         //TODO: Call python script
+        exec.execute("echo 'Hello world!'");
         const data = await this.db.getAllSensorData()
         expect(data.length).toBe(1001)
         done()
