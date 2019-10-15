@@ -40,7 +40,7 @@ def runMQTT():
 
     client.loop_forever()
 
-if __name__ == "__main__":
+def main():
     global db
     try:
         db = sqlite3.connect("../../Documents/database-demo/database/smart_home.db")
@@ -49,3 +49,6 @@ if __name__ == "__main__":
         raise(e)
 
     runMQTT() # this runs forever
+
+if __name__ =="__main__":
+    main()
