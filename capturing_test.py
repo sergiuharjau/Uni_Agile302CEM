@@ -1,6 +1,8 @@
 import unittest 
 import capturingData
 import paho.mqtt.client as mqtt #import the client1
+import subprocess
+import time
 
 def publish(message):
 
@@ -20,6 +22,12 @@ def publish(message):
     client.publish("302CEM/placeholder/sensors/test", message)
 
 if __name__ == "__main__":
+
+    proc = subprocess.Popen(['python3', 'capturingData.py'])
+
     message = '{"label": "temp1", "value":"data", "time":"currently"}'
     publish(message)
+    time.sleep(3)
+    
+    proc.kill()
     #at this point nodeJS checks if db is populated
