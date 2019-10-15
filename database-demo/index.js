@@ -1,4 +1,4 @@
-const Database = require("./modules/database")
+const Database = require("./modules/Database")
 const databasePath = './database/smart_home.db'
 
 async function getAllData () {
@@ -43,7 +43,7 @@ async function PrintData (JSONData) {
 	});
 }
 
-// getAllData()
+getAllData()
 
 // getTodaysData()
 
@@ -53,4 +53,4 @@ async function PrintData (JSONData) {
 
 // latestReading();
 
-getStatistics();
+// getStatistics();
