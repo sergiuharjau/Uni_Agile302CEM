@@ -17,7 +17,7 @@ def publish(message):
     client.tls_set("/home/pi/Downloads/mqtt.crt")
     client.connect(broker_address, broker_port) #connect to broker
 
-    client.publish("302CEM/placeholders/sensors/#", message)
+    client.publish("302CEM/placeholders/sensors/test", message)
 
 if __name__ == "__main__":
     message = '{"label": "temp1", "value":"data", "time":"currently"}'
