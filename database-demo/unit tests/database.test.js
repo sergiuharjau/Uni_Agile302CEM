@@ -51,9 +51,6 @@ describe('register()', () => {
 
         const startDate = new Date()
         const endDate = new Date(new Date()- 120000000) 
-
-        console.log(startDate)
-        console.log(endDate)
         
         await expect(this.db.getRangeData(startDate,endDate)).rejects.toEqual( Error('Start date must be before end date'))
         done()
