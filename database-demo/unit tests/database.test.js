@@ -22,13 +22,23 @@ describe('register()', () => {
         expect(data.length).toBe(1000)
         done()
     })
-    
+
     test('database can insert a new record', async done => {
         expect.assertions(1)
         //TODO: Call python script
         expect(1001).toBe(1001)
         done()
-	})
+    })
+
+    test('database can select the latest reading', async done => {
+        expect.assertions(2)
+        const data = await this.db.latestReading()
+        expect(data.length).toBe(1)
+        expect(data[0].dateRecorded).toBe('2019-08-10 01:23:04')
+        done()
+    })
+    
+
 
 })
 
