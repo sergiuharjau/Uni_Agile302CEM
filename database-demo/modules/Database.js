@@ -62,7 +62,7 @@ module.exports = class database {
 	}
 
 	async getRangeData(startDate, endDate) {
-		try {
+			if (endDate < startDate) throw new Error('Start date must be before end date')
 			const searchStartDate = await getDateFormat(startDate)
 			const searchEndDate= await getDateFormat(endDate)
 			const sql = `SELECT s.sensorName
@@ -74,9 +74,6 @@ module.exports = class database {
 						WHERE d.dateRecorded BETWEEN '${searchStartDate}' AND '${searchEndDate}';`
 									console.log(sql)
 			return await this.db.all(sql)
-		} catch (err){
-			return err
-		}
 	}
 
 	async getTodaysData() {
