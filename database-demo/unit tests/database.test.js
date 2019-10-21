@@ -37,9 +37,27 @@ describe('register()', () => {
         expect(data[0].dateRecorded).toBe('2019-08-10 01:23:04')
         done()
     })
-    
 
+    test('database can select the latest reading', async done => {
+        expect.assertions(2)
+        const data = await this.db.latestReading()
+        expect(data.length).toBe(1)
+        expect(data[0].dateRecorded).toBe('2019-08-10 01:23:04')
+        done()
+    })
 
+    test('database select range - start date after end date', async done => {
+        expect.assertions(1)
+
+        const startDate = new Date()
+        const endDate = new Date(new Date()- 120000000) 
+
+        console.log(startDate)
+        console.log(endDate)
+        
+        await expect(this.db.getRangeData(startDate,endDate)).rejects.toEqual( Error('Start date must be before end date'))
+        done()
+    })
 })
 
 async function insertFakeData(db) {
