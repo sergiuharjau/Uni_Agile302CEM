@@ -7,8 +7,7 @@ import threading
 
 def publish(message):
 
-    time.sleep(0.5)
-
+    time.sleep(0.1)
     broker_address = "mqtt.coventry.ac.uk" 
     broker_port = 8883
 
@@ -73,25 +72,15 @@ if __name__ == "__main__":
     insertFakeData() #fills with empty fake data for 1000 rows
 
     print(len(readAllData()))
-    print(id(capturingData.Capturing.db))
 
     message = '{"label": "temp1", "value":"data", "time":"currently"}'
     t = threading.Thread(target=publish, args=(message,))
     t.start()
 
-    #time.sleep(0.3)
-    capturingData.Capturing.cur = capturingData.Capturing.db.cursor() 
-
     capturingData.Capturing.runMQTT(testing=True)
 
-    time.sleep(0.5)
     t.join()
-
-    time.sleep(0.1)
     
     print(len(readAllData()))
-
-    #time.sleep(3)
-    
 
     #at this point nodeJS checks if db is populated

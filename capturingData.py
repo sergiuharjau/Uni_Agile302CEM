@@ -7,7 +7,6 @@ import time
 class Capturing():
     
     db = None 
-    cur = None
 
     def __init__(self):
         pass
@@ -21,17 +20,16 @@ class Capturing():
     def insertIntoSQL(jsonString):
 
         try:
-            print("Inside insert: ", jsonString)
-            
             sql =  '''INSERT INTO data(sensorName, value, dateRecorded)
                         VALUES(?,?,?); '''
-            print("Hash inside, ", id(Capturing.db))
-            print("Passed db.cursor()")
+
+            cur = Capturing.db.cursor()
+
             data = json.loads(jsonString.decode())
             tuple = (data["label"], data["value"], data["time"])
-            Capturing.cur.execute(sql, tuple)
-            print("Committing")
-            Capturing.cur.execute("COMMIT;")
+            cur.execute(sql, tuple)
+            cur.execute("COMMIT;")
+
         except Error as e:
             print("Sql error: ", e)
 
@@ -58,7 +56,7 @@ class Capturing():
         startTime = time.time()
         if testing:
             print("Listening")
-            while time.time() - startTime < 1:
+            while time.time() - startTime < 0.1:
                 pass
             client.loop_stop()
 
