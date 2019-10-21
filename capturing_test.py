@@ -7,7 +7,6 @@ import threading
 
 def publish(message):
 
-    time.sleep(0.1)
     broker_address = "mqtt.coventry.ac.uk" 
     broker_port = 8883
 
@@ -21,7 +20,8 @@ def publish(message):
     client.tls_set("../../../mqtt.crt")
     client.connect(broker_address, broker_port) #connect to broker
 
-    print("Just published")
+    #print("Just published")
+    time.sleep(0.07)
     client.publish("302CEM/placeholder/sensors/test", message)
 
 def createDB():
@@ -71,16 +71,14 @@ if __name__ == "__main__":
     createDB() 
     insertFakeData() #fills with empty fake data for 1000 rows
 
-    print(len(readAllData()))
-
     message = '{"label": "temp1", "value":"data", "time":"currently"}'
     t = threading.Thread(target=publish, args=(message,))
     t.start()
 
     capturingData.Capturing.runMQTT(testing=True)
 
-    t.join()
-    
-    print(len(readAllData()))
-
-    #at this point nodeJS checks if db is populated
+    if len(readAllData()) == 1001:
+        print("Passed.")
+    else:
+        print("Invalid.")
+#at this point nodeJS checks if db is populated

@@ -13,7 +13,7 @@ class Capturing():
 
     @staticmethod
     def on_message(client, userdata, msg):
-        print(msg.topic+":\n"+str(msg.payload.decode()))
+        #print(msg.topic+":\n"+str(msg.payload.decode()))
         Capturing.insertIntoSQL(msg.payload)
    
     @staticmethod
@@ -55,8 +55,8 @@ class Capturing():
         
         startTime = time.time()
         if testing:
-            print("Listening")
-            while time.time() - startTime < 0.1:
+            #print("Listening")
+            while time.time() - startTime < 0.12:
                 pass
             client.loop_stop()
 
