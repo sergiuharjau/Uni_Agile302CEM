@@ -23,10 +23,6 @@ async function sh(cmd) {
     });
   }
 
-let output = sh("python3 /home/pi/Documents/AgilePlaceholder/capturing_test.py")
-
-console.log(output)
-
 module.exports = {
     execute,
     sh
