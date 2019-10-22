@@ -92,8 +92,20 @@ module.exports = class database {
 
 	async getStatistics(sensorName, startDate, endDate) {
 		try {
-			const searchStartDate = await getDateFormat(startDate)
-			const searchEndDate= await getDateFormat(endDate)
+			var searchStartDate = null
+			var searchEndDate = null
+			if (typeof(startDate) == Date) {
+				searchStartDate = await getDateFormat(startDate)
+			} else {
+				searchStartDate = null
+			}
+			
+			if (typeof(endDate) == Date) {
+				searchEndDate = await getDateFormat(endDate)
+			} else {
+				searchEndDate = null
+			}
+			
 			const sql = `SELECT s.sensorName
 							, s.location
 							, MIN(d.value)
@@ -109,7 +121,6 @@ module.exports = class database {
 			return err
 		}
 	}
-
 }
 
 async function getDateFormat(date){
