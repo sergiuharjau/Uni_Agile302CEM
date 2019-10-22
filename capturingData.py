@@ -56,7 +56,7 @@ class Capturing():
         startTime = time.time()
         if testing:
             #print("Listening")
-            while time.time() - startTime < 0.12:
+            while time.time() - startTime < 0.15:
                 pass
             client.loop_stop()
 

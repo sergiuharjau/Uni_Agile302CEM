@@ -1,6 +1,5 @@
 import capturingData
 import paho.mqtt.client as mqtt #import the client1
-import subprocess
 import time
 import sqlite3
 import threading
@@ -21,7 +20,7 @@ def publish(message):
     client.connect(broker_address, broker_port) #connect to broker
 
     #print("Just published")
-    time.sleep(0.07)
+    time.sleep(0.13)
     client.publish("302CEM/placeholder/sensors/test", message)
 
 def createDB():
@@ -44,10 +43,14 @@ def createDB():
 def insertFakeData():
 
     cur = capturingData.Capturing.db.cursor()
-
+    i = 0
     for line in open("database-demo/database/data.sql", "r").readlines():
         cur.execute(line)
         cur.execute("COMMIT;")
+
+        if i > 2:
+            break
+        i += 1
 
 def readAllData():
 
@@ -69,7 +72,7 @@ if __name__ == "__main__":
     capturingData.Capturing.db = sqlite3.connect(":memory:", check_same_thread=False) 
 
     createDB() 
-    insertFakeData() #fills with empty fake data for 1000 rows
+    insertFakeData() #fills with empty fake data for 1 row
 
     message = '{"label": "temp1", "value":"data", "time":"currently"}'
     t = threading.Thread(target=publish, args=(message,))
@@ -77,8 +80,10 @@ if __name__ == "__main__":
 
     capturingData.Capturing.runMQTT(testing=True)
 
-    if len(readAllData()) == 1001:
+    t.join()
+    if len(readAllData()) == 2:
         print("Passed.")
     else:
         print("Invalid.")
+
 #at this point nodeJS checks if db is populated
