@@ -1,19 +1,10 @@
 #!/usr/bin/env node
-
-function execute(command) {
-  const exec = require('child_process').exec
-  
-    exec(command, (err, stdout, stderr) => {
-      console.log(err, stdout, stderr)
-      return(stdout)
-    })
-  }
+const run = require('child_process').exec
   
 async function sh(cmd) {
-  const exec = require('child_process').exec
   
     return new Promise(function (resolve, reject) {
-      exec(cmd, (err, stdout, stderr) => {
+      run(cmd, (err, stdout, stderr) => {
         if (err) {
           reject(err);
         } else {
@@ -24,6 +15,5 @@ async function sh(cmd) {
   }
 
 module.exports = {
-    execute,
     sh
 }
