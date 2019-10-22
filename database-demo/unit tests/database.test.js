@@ -27,7 +27,7 @@ describe('register()', () => {
         expect.assertions(1)
 
         const result = exec.execute("python3 /home/pi/Documents/AgilePlaceholder/capturing_test.py")
-        expect(result).toBe("Passed.")
+        expect(result).toBe("Passed.\n")
 
         done()
     })
