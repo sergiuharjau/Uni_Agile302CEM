@@ -57,6 +57,16 @@ describe('register()', () => {
         await expect(this.db.getRangeData(startDate,endDate)).rejects.toEqual( Error('Start date must be before end date'))
         done()
     })
+
+    test('database select range - retrieve data for a specified date', async done => {
+        expect.assertions(1)
+
+        const startDate = new Date(2019,7,1,0,0,0,0)
+        const endDate = new Date(2019,7,2,0,0,0,0)
+        const data = await this.db.getRangeData(startDate,endDate)
+        await expect(data.length).toEqual(7)
+        done()
+    })
 })
 
 async function insertFakeData(db) {

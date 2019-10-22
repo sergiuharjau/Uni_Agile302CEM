@@ -69,10 +69,9 @@ module.exports = class database {
 							, s.location
 							, d.value
 							, d.dateRecorded
-						FROM data d,
+						FROM data d
 							INNER JOIN sensors s on s.sensorName = d.sensorName
 						WHERE d.dateRecorded BETWEEN '${searchStartDate}' AND '${searchEndDate}';`
-									console.log(sql)
 			return await this.db.all(sql)
 	}
 
