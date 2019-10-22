@@ -46,7 +46,7 @@ class Capturing():
         client.username_pw_set(user, password)
 
         client.on_message = Capturing.on_message
-        client.tls_set("home/pi/Downloads/mqtt.crt")
+        client.tls_set("/home/pi/Downloads/mqtt.crt")
         client.connect(broker_address, broker_port) #connect to broker
 
         client.subscribe("302CEM/placeholder/sensors/#")

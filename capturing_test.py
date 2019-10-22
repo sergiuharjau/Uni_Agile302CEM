@@ -44,7 +44,7 @@ def insertFakeData():
 
     cur = capturingData.Capturing.db.cursor()
     i = 0
-    for line in open("database-demo/database/data.sql", "r").readlines():
+    for line in open("/home/pi/Documents/AgilePlaceholder/database-demo/database/data.sql", "r").readlines():
         cur.execute(line)
         cur.execute("COMMIT;")
 
