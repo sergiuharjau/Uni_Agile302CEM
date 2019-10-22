@@ -26,9 +26,9 @@ describe('register()', () => {
     test('database can insert a new record', async done => {
         expect.assertions(1)
 
-        const result = exec.execute("python3 ../../capturing_test.py")
+        const result = exec.execute("python3 home/pi/Documents/AgilePlaceholder/capturing_test.py")
         expect(result).toBe("Passed.")
-        
+
         done()
     })
 
