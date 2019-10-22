@@ -25,8 +25,8 @@ describe('register()', () => {
 
     test('database can insert a new record', async done => {
         expect.assertions(1)
-        //TODO: Call python script
-        expect(1001).toBe(1001)
+        result = exec.execute("python3 ../../capturing_test.py")
+        expect(result).toBe("Passed.")
         done()
     })
 
