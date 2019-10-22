@@ -16,7 +16,7 @@ def publish(message):
 
     client.username_pw_set(user, password)
 
-    client.tls_set("../../../mqtt.crt")
+    client.tls_set("/home/pi/Downloads/mqtt.crt")
     client.connect(broker_address, broker_port) #connect to broker
 
     #print("Just published")
