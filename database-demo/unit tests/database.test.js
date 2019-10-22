@@ -26,11 +26,10 @@ describe('register()', () => {
     test('database can insert a new record', async done => {
         expect.assertions(1)
 
-        let output = exec.sh("python3 /home/pi/Documents/AgilePlaceholder/capturing_test.py")
-        
-        output.then(function(result) {
-            expect(result).toBe("Passed.\n")
-        })
+        let output = await exec.sh("python3 /home/pi/Documents/AgilePlaceholder/capturing_test.py")
+
+        expect(output).toBe("Passed.\n")
+
         done()
     })
 
