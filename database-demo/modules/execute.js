@@ -3,7 +3,7 @@
 function execute(command) {
   const exec = require('child_process').exec
   
-    await exec(command, (err, stdout, stderr) => {
+    exec(command, (err, stdout, stderr) => {
       console.log(err, stdout, stderr)
       return(stdout)
     })
