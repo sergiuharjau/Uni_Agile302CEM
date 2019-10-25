@@ -22,14 +22,18 @@ module.exports = class database {
 		})()
 	}
 
-	async getAllSensorData() {
+	async getAllSensorData(userName) {
 		try {
-			const sql = `SELECT s.sensorName
-							, s.location
-							, d.value
-							, d.dateRecorded 
-						FROM data d
-							INNER JOIN sensors s on s.sensorName = d.sensorName;`
+			const sql = `SELECT se.sensorName
+						, se.location
+						, d.value
+						, d.dateRecorded 
+					FROM data d
+						INNER JOIN sensors se on se.sensorName = d.sensorName
+						INNER JOIN subscriptions su on su.sensorName = se.sensorName
+						INNER JOIN users u on u.userName = su.userName
+					WHERE u.userName = ${userName}
+						AND d.dateRecorded BETWEEN su.EFFECT_FROM_DATE AND EFFECT_TO_DATE;`
 			return await this.db.all(sql)
 		} catch (err){
 			return err
@@ -46,14 +50,18 @@ module.exports = class database {
 		}
 	}
 
-	async latestReading() {
+	async latestReading(userName) {
 		try {
-			const sql = `SELECT s.sensorName
-							, s.location
+			const sql = `SELECT se.sensorName
+							, se.location
 							, d.value
 							, d.dateRecorded 
 						FROM data d
-							INNER JOIN sensors s on s.sensorName = d.sensorName
+							INNER JOIN sensors se on se.sensorName = d.sensorName
+							INNER JOIN subscriptions su on su.sensorName = se.sensorName
+							INNER JOIN users u on u.userName = su.userName
+						WHERE u.userName = ${userName}
+							AND d.dateRecorded BETWEEN su.EFFECT_FROM_DATE AND EFFECT_TO_DATE
 						ORDER BY d.dateCreated Desc,d.ROWID ASC LIMIT 1;`
 			return await this.db.all(sql)
 		} catch (err){
@@ -61,29 +69,37 @@ module.exports = class database {
 		}
 	}
 
-	async getRangeData(startDate, endDate) {
+	async getRangeData(userName, startDate, endDate) {
 			if (endDate < startDate) throw new Error('Start date must be before end date')
 			const searchStartDate = await getDateFormat(startDate)
 			const searchEndDate= await getDateFormat(endDate)
-			const sql = `SELECT s.sensorName
-							, s.location
-							, d.value
-							, d.dateRecorded
-						FROM data d
-							INNER JOIN sensors s on s.sensorName = d.sensorName
-						WHERE d.dateRecorded BETWEEN '${searchStartDate}' AND '${searchEndDate}';`
+			const sql = `SELECT se.sensorName
+			, se.location
+			, d.value
+			, d.dateRecorded 
+		FROM data d
+			INNER JOIN sensors se on se.sensorName = d.sensorName
+			INNER JOIN subscriptions su on su.sensorName = se.sensorName
+			INNER JOIN users u on u.userName = su.userName
+		WHERE u.userName = ${userName}
+			AND d.dateRecorded BETWEEN su.EFFECT_FROM_DATE AND EFFECT_TO_DATE
+			AND d.dateRecorded BETWEEN '${searchStartDate}' AND '${searchEndDate}';`
 			return await this.db.all(sql)
 	}
 
 	async getTodaysData() {
 		try {
-			const sql = `SELECT s.sensorName 
-							, s.location
-							, d.value
-							, d.dateRecorded 
-						FROM data d
-							INNER JOIN sensors s on s.sensorName = d.sensorName
-						WHERE DATE(d.dateRecorded) = DATE('now');`
+			const sql = `SELECT se.sensorName
+						, se.location
+						, d.value
+						, d.dateRecorded 
+					FROM data d
+						INNER JOIN sensors se on se.sensorName = d.sensorName
+						INNER JOIN subscriptions su on su.sensorName = se.sensorName
+						INNER JOIN users u on u.userName = su.userName
+					WHERE u.userName = ${userName}
+						AND d.dateRecorded BETWEEN su.EFFECT_FROM_DATE AND EFFECT_TO_DATE
+						AND DATE(d.dateRecorded) = DATE('now');`
 			return await this.db.all(sql)
 		} catch (err){
 			return err
@@ -106,14 +122,18 @@ module.exports = class database {
 				searchEndDate = null
 			}
 			
-			const sql = `SELECT s.sensorName
-							, s.location
+			const sql = `SELECT se.sensorName
+							, se.location
 							, MIN(d.value)
 							, AVG(d.value)
 							, MAX(d.value)
 						FROM data d
-							INNER JOIN sensors s on s.sensorName = d.sensorName
-						WHERE (${sensorName} IS NULL OR s.sensorName = ${sensorName})
+							INNER JOIN sensors se on se.sensorName = d.sensorName
+							INNER JOIN subscriptions su on su.sensorName = se.sensorName
+							INNER JOIN users u on u.userName = su.userName
+						WHERE u.userName = ${userName}
+							AND d.dateRecorded BETWEEN su.EFFECT_FROM_DATE AND EFFECT_TO_DATE
+							AND (${sensorName} IS NULL OR s.sensorName = ${sensorName})
 							AND ((${searchStartDate} IS NULL OR ${searchEndDate} IS NULL) OR d.dateRecorded BETWEEN ${searchStartDate} AND ${searchEndDate})
 						GROUP BY s.sensorName;`
 			return await this.db.all(sql)
