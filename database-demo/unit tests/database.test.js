@@ -23,6 +23,13 @@ describe('register()', () => {
         done()
     })
 
+    test('user can only get data within subscribed dates', async done => {
+        expect.assertions(1)
+        const data = await this.db.getAllSensorData('test2')
+        expect(data.length).toBe(15)
+        done()
+    })
+
     test('database can insert a new record', async done => {
         expect.assertions(1)
         let output = await exec.sh("python3 /home/pi/Documents/AgilePlaceholder/capturing_test.py")
