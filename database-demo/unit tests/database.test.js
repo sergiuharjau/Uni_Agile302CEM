@@ -84,6 +84,15 @@ describe('Database', () => {
             done()
         })
     })
+
+    describe('getTodaysData()', () => {
+        test('database returns 0 where there no data today', async done => {
+            expect.assertions(1)
+            const data = await this.db.getTodaysData('test')
+            await expect(data.length).toEqual(0)
+            done()
+        })
+    })
     
     // describe()
 })

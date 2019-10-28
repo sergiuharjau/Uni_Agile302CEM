@@ -84,7 +84,7 @@ class database {
 			return await this.db.all(sql)
 	}
 
-	async getTodaysData() {
+	async getTodaysData(userName) {
 		try {
 			const sql = `SELECT se.sensorName
 						, se.location
