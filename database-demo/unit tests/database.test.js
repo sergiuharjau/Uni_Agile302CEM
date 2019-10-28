@@ -69,12 +69,23 @@ describe('Database', () => {
         })
     })
 
-    xtest('database can insert a new record', async done => {
-        expect.assertions(1)
-        let output = await exec.sh("python3 /home/pi/Documents/AgilePlaceholder/capturing_test.py")
-        expect(output).toBe("Passed.\n")
-        done()
-    })    
+    describe('insertData()', () => {
+        xtest('database can insert a new record', async done => {
+            expect.assertions(1)
+            let output = await exec.sh("python3 /home/pi/Documents/AgilePlaceholder/capturing_test.py")
+            expect(output).toBe("Passed.\n")
+            done()
+        })
+
+        test('database can insert a new record for testing purposes only', async done => {
+            expect.assertions(1)
+            const error = await this.db.insertData('test')
+            await expect(error.message).toEqual('This is for testing only.')
+            done()
+        })
+    })
+    
+    // describe()
 })
 
 async function insertFakeData(db) {
