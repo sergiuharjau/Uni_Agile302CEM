@@ -8,62 +8,73 @@ const dataPath = './database/data.sql'
 
 const exec = require("../modules/execute")
 
-describe('register()', () => {
-    this.db
-
+describe('Database', () => {
     beforeAll(async() => {
         this.db = await new Database()
         await insertFakeData(this.db)
     });
 
-	test('user can select all their data', async done => {
-        expect.assertions(1)
-        const data = await this.db.getAllSensorData('test')
-        expect(data.length).toBe(1000)
-        done()
+    describe('getAllSensorData()', () => {
+        test('user can select all their data', async done => {
+            expect.assertions(1)
+            const data = await this.db.getAllSensorData('test')
+            expect(data.length).toBe(1000)
+            done()
+        })
+    
+        test('procedure will only get data within subscribed dates', async done => {
+            expect.assertions(1)
+            const data = await this.db.getAllSensorData('test2')
+            expect(data.length).toBe(15)
+            done()
+        })
     })
 
-    test('user can only get data within subscribed dates', async done => {
-        expect.assertions(1)
-        const data = await this.db.getAllSensorData('test2')
-        expect(data.length).toBe(15)
-        done()
+    describe('latestReading()', () => {
+        test('User can select the latest reading', async done => {
+            expect.assertions(2)
+            const data = await this.db.latestReading('test')
+            expect(data.length).toBe(1)
+            expect(data[0].dateRecorded).toBe('2019-08-10 01:23:04')
+            done()
+        })
+
+        test('User who has never been subscribed returns 0', async done => {
+            expect.assertions(1)
+            const data = await this.db.latestReading('test3')
+            expect(data.length).toBe(0)
+            done()
+        })
     })
 
-    test('database can insert a new record', async done => {
+	describe('getRangeData()', () => {
+        test('database select range - start date after end date', async done => {
+            expect.assertions(1)
+    
+            const startDate = new Date()
+            const endDate = new Date(new Date()- 120000000) 
+            
+            await expect(this.db.getRangeData('test',startDate,endDate)).rejects.toEqual( Error('Start date must be before end date'))
+            done()
+        })
+    
+        test('database select range - retrieve data for a specified date', async done => {
+            expect.assertions(1)
+    
+            const startDate = new Date(2019,7,1,0,0,0,0)
+            const endDate = new Date(2019,7,2,0,0,0,0)
+            const data = await this.db.getRangeData('test',startDate,endDate)
+            await expect(data.length).toEqual(7)
+            done()
+        })
+    })
+
+    xtest('database can insert a new record', async done => {
         expect.assertions(1)
         let output = await exec.sh("python3 /home/pi/Documents/AgilePlaceholder/capturing_test.py")
         expect(output).toBe("Passed.\n")
         done()
-    })
-
-    test('database can select the latest reading', async done => {
-        expect.assertions(2)
-        const data = await this.db.latestReading('test')
-        expect(data.length).toBe(1)
-        expect(data[0].dateRecorded).toBe('2019-08-10 01:23:04')
-        done()
-    })
-
-    test('database select range - start date after end date', async done => {
-        expect.assertions(1)
-
-        const startDate = new Date()
-        const endDate = new Date(new Date()- 120000000) 
-        
-        await expect(this.db.getRangeData('test',startDate,endDate)).rejects.toEqual( Error('Start date must be before end date'))
-        done()
-    })
-
-    test('database select range - retrieve data for a specified date', async done => {
-        expect.assertions(1)
-
-        const startDate = new Date(2019,7,1,0,0,0,0)
-        const endDate = new Date(2019,7,2,0,0,0,0)
-        const data = await this.db.getRangeData('test',startDate,endDate)
-        await expect(data.length).toEqual(7)
-        done()
-    })
+    })    
 })
 
 async function insertFakeData(db) {

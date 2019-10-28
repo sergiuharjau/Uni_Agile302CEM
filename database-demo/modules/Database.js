@@ -16,7 +16,6 @@ class database {
 			} catch (error) {
 				console.log(error)
 			}
-			
 		})()
 	}
 

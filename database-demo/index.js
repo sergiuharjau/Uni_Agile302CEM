@@ -1,4 +1,4 @@
-const Database = require("./modules/Database")
+const Database = require("./modules/Database").database
 const databasePath = './database/smart_home.db'
 
 async function getAllData () {
