@@ -10,7 +10,6 @@ class database {
 			try {
 				this.db = await sqlite.open(dbName);
 				if (dbName === ':memory:') {
-					console.log("data in memory")
 					this.db = await createDatabaseStructure(this.db)
 				}
 				return this
@@ -33,7 +32,6 @@ class database {
 						INNER JOIN users u on u.userName = su.userName
 					WHERE u.userName = '${userName}'
 						AND d.dateRecorded BETWEEN su.EFFECT_FROM_DATE AND EFFECT_TO_DATE;`
-			console.log(sql)
 						return await this.db.all(sql)
 		} catch (err){
 			return err
