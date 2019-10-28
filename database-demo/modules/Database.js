@@ -1,18 +1,17 @@
 'use strict'
 const sqlite = require('sqlite-async')
+const fs = require('fs')
+const readline = require('readline')
+const dataFile = './database/createDbFile.sql'
 
-module.exports = class database {
+class database {
 	constructor(dbName=':memory:') {
 		return (async() => {
 			try {
 				this.db = await sqlite.open(dbName);
 				if (dbName === ':memory:') {
 					console.log("data in memory")
-					//TODO: Insert script to create database from scratch
-					var sql = 'CREATE TABLE sensors (sensorName VARCHAR (32) UNIQUE CONSTRAINT PK_sensors PRIMARY KEY NOT NULL, type VARCHAR (16) NOT NULL, location VARCHAR (16) NOT NULL, dateAdded DATETIME DEFAULT (CURRENT_TIMESTAMP));'
-					await this.db.run(sql)
-					var sql = 'CREATE TABLE data (sensorName   VARCHAR (32) NOT NULL CONSTRAINT FK_Sensors_data REFERENCES sensors (sensorName), value VARCHAR (8)  NOT NULL ON CONFLICT ROLLBACK, dateRecorded VARCHAR (32) NOT NULL, dateCreated DATETIME DEFAULT (CURRENT_TIMESTAMP), PRIMARY KEY(sensorName, dateRecorded));'
-					await this.db.run(sql)
+					this.db = await createDatabaseStructure(this.db)
 				}
 				return this
 			} catch (error) {
@@ -32,9 +31,10 @@ module.exports = class database {
 						INNER JOIN sensors se on se.sensorName = d.sensorName
 						INNER JOIN subscriptions su on su.sensorName = se.sensorName
 						INNER JOIN users u on u.userName = su.userName
-					WHERE u.userName = ${userName}
+					WHERE u.userName = '${userName}'
 						AND d.dateRecorded BETWEEN su.EFFECT_FROM_DATE AND EFFECT_TO_DATE;`
-			return await this.db.all(sql)
+			console.log(sql)
+						return await this.db.all(sql)
 		} catch (err){
 			return err
 		}
@@ -60,7 +60,7 @@ module.exports = class database {
 							INNER JOIN sensors se on se.sensorName = d.sensorName
 							INNER JOIN subscriptions su on su.sensorName = se.sensorName
 							INNER JOIN users u on u.userName = su.userName
-						WHERE u.userName = ${userName}
+						WHERE u.userName = '${userName}'
 							AND d.dateRecorded BETWEEN su.EFFECT_FROM_DATE AND EFFECT_TO_DATE
 						ORDER BY d.dateCreated Desc,d.ROWID ASC LIMIT 1;`
 			return await this.db.all(sql)
@@ -74,16 +74,16 @@ module.exports = class database {
 			const searchStartDate = await getDateFormat(startDate)
 			const searchEndDate= await getDateFormat(endDate)
 			const sql = `SELECT se.sensorName
-			, se.location
-			, d.value
-			, d.dateRecorded 
-		FROM data d
-			INNER JOIN sensors se on se.sensorName = d.sensorName
-			INNER JOIN subscriptions su on su.sensorName = se.sensorName
-			INNER JOIN users u on u.userName = su.userName
-		WHERE u.userName = ${userName}
-			AND d.dateRecorded BETWEEN su.EFFECT_FROM_DATE AND EFFECT_TO_DATE
-			AND d.dateRecorded BETWEEN '${searchStartDate}' AND '${searchEndDate}';`
+							, se.location
+							, d.value
+							, d.dateRecorded 
+						FROM data d
+							INNER JOIN sensors se on se.sensorName = d.sensorName
+							INNER JOIN subscriptions su on su.sensorName = se.sensorName
+							INNER JOIN users u on u.userName = su.userName
+						WHERE u.userName = '${userName}'
+							AND d.dateRecorded BETWEEN su.EFFECT_FROM_DATE AND EFFECT_TO_DATE
+							AND d.dateRecorded BETWEEN '${searchStartDate}' AND '${searchEndDate}';`
 			return await this.db.all(sql)
 	}
 
@@ -97,7 +97,7 @@ module.exports = class database {
 						INNER JOIN sensors se on se.sensorName = d.sensorName
 						INNER JOIN subscriptions su on su.sensorName = se.sensorName
 						INNER JOIN users u on u.userName = su.userName
-					WHERE u.userName = ${userName}
+					WHERE u.userName = '${userName}'
 						AND d.dateRecorded BETWEEN su.EFFECT_FROM_DATE AND EFFECT_TO_DATE
 						AND DATE(d.dateRecorded) = DATE('now');`
 			return await this.db.all(sql)
@@ -131,7 +131,7 @@ module.exports = class database {
 							INNER JOIN sensors se on se.sensorName = d.sensorName
 							INNER JOIN subscriptions su on su.sensorName = se.sensorName
 							INNER JOIN users u on u.userName = su.userName
-						WHERE u.userName = ${userName}
+						WHERE u.userName = '${userName}'
 							AND d.dateRecorded BETWEEN su.EFFECT_FROM_DATE AND EFFECT_TO_DATE
 							AND (${sensorName} IS NULL OR s.sensorName = ${sensorName})
 							AND ((${searchStartDate} IS NULL OR ${searchEndDate} IS NULL) OR d.dateRecorded BETWEEN ${searchStartDate} AND ${searchEndDate})
@@ -158,4 +158,23 @@ async function getDateFormat(date){
 
 async function formatDatePart(component){
 	return component.toString().padStart(2,'0')
+}
+
+async function createDatabaseStructure(db) {
+    const fileStream = fs.createReadStream(dataFile);
+    
+    const rl = readline.createInterface({
+        input: fileStream,
+        crlfDelay: Infinity
+	});
+	
+    for await (const line of rl) {
+        await db.all(line)
+	}
+
+	return db
+}
+
+module.exports = {
+	database
 }

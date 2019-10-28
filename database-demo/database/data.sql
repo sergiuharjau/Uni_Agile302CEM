@@ -1,3 +1,9 @@
+INSERT INTO subscriptions (_id, username, sensorName, EFFECT_FROM_DATE, EFFECT_TO_DATE) VALUES (1, 'test', 'temp1', '2019-01-25 11:03:56', '9999-12-31 23:59:59');
+INSERT INTO subscriptions (_id, username, sensorName, EFFECT_FROM_DATE, EFFECT_TO_DATE) VALUES (2, 'test', 'temp2', '2019-01-25 11:10:00', '9999-12-31 23:59:59');
+INSERT INTO subscriptions (_id, username, sensorName, EFFECT_FROM_DATE, EFFECT_TO_DATE) VALUES (3, 'test', 'temp3', '2019-01-25 11:13:03', '9999-12-31 23:59:59');
+INSERT INTO subscriptions (_id, username, sensorName, EFFECT_FROM_DATE, EFFECT_TO_DATE) VALUES (4, 'test2', 'temp1', '2019-10-25 11:14:09', NULL);
+INSERT INTO users (username, dateCreated, password) VALUES ('test', '2019-10-25 11:02:14', 'test');
+INSERT INTO users (username, dateCreated, password) VALUES ('test2', '2019-10-25 11:13:43', 'test2');
 insert into sensors(sensorName, type, location) values ('temp1', 'Temperature', 'Kitchen');
 insert into sensors(sensorName, type, location) values ('temp2', 'Temperature', 'Lounge');
 insert into sensors(sensorName, type, location) values ('temp3', 'Temperature', 'Master Bedroom');
