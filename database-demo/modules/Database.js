@@ -103,7 +103,7 @@ class database {
 		}
 	}
 
-	async getStatistics(sensorName, startDate, endDate) {
+	async getStatistics(userName, sensorName, startDate, endDate) {
 
 		/*
 		Check using Object.prototype was found at the following site
@@ -114,7 +114,7 @@ class database {
 		*/
 		if (Object.prototype.toString.call(startDate) !== '[object Date]') throw new Error('Please provide a valid start date')
 		if (Object.prototype.toString.call(endDate) !== '[object Date]') throw new Error('Please provide a valid end date')
-		
+		if (endDate < startDate) throw new Error('Please provide an endDate that is after the startDate')
 		const searchStartDate = await getDateFormat(startDate)
 		const searchEndDate = await getDateFormat(endDate)
 		
