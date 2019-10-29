@@ -94,7 +94,16 @@ describe('Database', () => {
         })
     })
     
-    // describe()
+    describe('getStatistics()', () => {
+        test('database returns error if startDate is not a date', async done => {
+            expect.assertions(1)
+            const startDate = 123
+            const endDate = new Date(2019,12,31,23,59,59)
+            const error = await this.db.getStatistics('test',startDate,endDate)
+            await expect(error.message).toEqual('Please provide a valid start date')
+            done()
+        })
+    })
 })
 
 async function insertFakeData(db) {

@@ -107,17 +107,11 @@ class database {
 		try {
 			var searchStartDate = null
 			var searchEndDate = null
-			if (typeof(startDate) == Date) {
-				searchStartDate = await getDateFormat(startDate)
-			} else {
-				searchStartDate = null
-			}
+			if (typeof(startDate) != Date) throw new Error('Please provide a valid start date')
+			if (typeof(endDate) != Date) throw new Error('Please provide a valid end date')
 			
-			if (typeof(endDate) == Date) {
-				searchEndDate = await getDateFormat(endDate)
-			} else {
-				searchEndDate = null
-			}
+			searchStartDate = await getDateFormat(startDate)
+			searchEndDate = await getDateFormat(endDate)
 			
 			const sql = `SELECT se.sensorName
 							, se.location
