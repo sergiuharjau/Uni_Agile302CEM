@@ -104,13 +104,19 @@ class database {
 	}
 
 	async getStatistics(sensorName, startDate, endDate) {
-		var searchStartDate = null
-		var searchEndDate = null
-		if (typeof(startDate) != Date) throw new Error('Please provide a valid start date')
-		if (typeof(endDate) != Date) throw new Error('Please provide a valid end date')
+
+		/*
+		Check using Object.prototype was found at the following site
+		Title: How to check whether an object is a date?
+		Author: Alexander Abakumov
+		Date Accessed: 29th October 2019
+		URL: https://stackoverflow.com/questions/643782/how-to-check-whether-an-object-is-a-date
+		*/
+		if (Object.prototype.toString.call(startDate) !== '[object Date]') throw new Error('Please provide a valid start date')
+		if (Object.prototype.toString.call(endDate) !== '[object Date]') throw new Error('Please provide a valid end date')
 		
-		searchStartDate = await getDateFormat(startDate)
-		searchEndDate = await getDateFormat(endDate)
+		const searchStartDate = await getDateFormat(startDate)
+		const searchEndDate = await getDateFormat(endDate)
 		
 		const sql = `SELECT se.sensorName
 						, se.location
