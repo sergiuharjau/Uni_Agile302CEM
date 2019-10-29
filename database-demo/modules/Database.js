@@ -104,33 +104,29 @@ class database {
 	}
 
 	async getStatistics(sensorName, startDate, endDate) {
-		try {
-			var searchStartDate = null
-			var searchEndDate = null
-			if (typeof(startDate) != Date) throw new Error('Please provide a valid start date')
-			if (typeof(endDate) != Date) throw new Error('Please provide a valid end date')
-			
-			searchStartDate = await getDateFormat(startDate)
-			searchEndDate = await getDateFormat(endDate)
-			
-			const sql = `SELECT se.sensorName
-							, se.location
-							, MIN(d.value)
-							, AVG(d.value)
-							, MAX(d.value)
-						FROM data d
-							INNER JOIN sensors se on se.sensorName = d.sensorName
-							INNER JOIN subscriptions su on su.sensorName = se.sensorName
-							INNER JOIN users u on u.userName = su.userName
-						WHERE u.userName = '${userName}'
-							AND d.dateRecorded BETWEEN su.EFFECT_FROM_DATE AND EFFECT_TO_DATE
-							AND (${sensorName} IS NULL OR s.sensorName = ${sensorName})
-							AND ((${searchStartDate} IS NULL OR ${searchEndDate} IS NULL) OR d.dateRecorded BETWEEN ${searchStartDate} AND ${searchEndDate})
-						GROUP BY s.sensorName;`
-			return await this.db.all(sql)
-		} catch (err){
-			return err
-		}
+		var searchStartDate = null
+		var searchEndDate = null
+		if (typeof(startDate) != Date) throw new Error('Please provide a valid start date')
+		if (typeof(endDate) != Date) throw new Error('Please provide a valid end date')
+		
+		searchStartDate = await getDateFormat(startDate)
+		searchEndDate = await getDateFormat(endDate)
+		
+		const sql = `SELECT se.sensorName
+						, se.location
+						, MIN(d.value)
+						, AVG(d.value)
+						, MAX(d.value)
+					FROM data d
+						INNER JOIN sensors se on se.sensorName = d.sensorName
+						INNER JOIN subscriptions su on su.sensorName = se.sensorName
+						INNER JOIN users u on u.userName = su.userName
+					WHERE u.userName = '${userName}'
+						AND d.dateRecorded BETWEEN su.EFFECT_FROM_DATE AND EFFECT_TO_DATE
+						AND (${sensorName} IS NULL OR s.sensorName = ${sensorName})
+						AND ((${searchStartDate} IS NULL OR ${searchEndDate} IS NULL) OR d.dateRecorded BETWEEN ${searchStartDate} AND ${searchEndDate})
+					GROUP BY s.sensorName;`
+		return await this.db.all(sql)
 	}
 }
 
