@@ -120,9 +120,9 @@ class database {
 		
 		const sql = `SELECT se.sensorName
 						, se.location
-						, MIN(d.value)
-						, AVG(d.value)
-						, MAX(d.value)
+						, ROUND(MIN(d.value),2) minValue
+						, ROUND(AVG(d.value),2) averageValue
+						, ROUND(MAX(d.value),2) maxValue
 					FROM data d
 						INNER JOIN sensors se on se.sensorName = d.sensorName
 						INNER JOIN subscriptions su on su.sensorName = se.sensorName

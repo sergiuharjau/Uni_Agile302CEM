@@ -270,7 +270,7 @@ describe('Database', () => {
         })
 
         test('Valid data returned when no dates are provided', async done => {
-            expect.assertions(3)
+            expect.assertions(6)
             const userName = 'test'
             const sensorName = 'temp1'
             const startDate = null
@@ -279,6 +279,9 @@ describe('Database', () => {
             expect(data.length).toBe(1)
             expect(data[0].sensorName).toBe('temp1')
             expect(data[0].location).toBe('Kitchen')
+            expect(data[0].minValue).toBe(1)
+            expect(data[0].averageValue).toBe(14.72)
+            expect(data[0].maxValue).toBe(30)
             done()
         })
     })
