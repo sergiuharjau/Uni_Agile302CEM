@@ -5,6 +5,7 @@ const readline = require('readline')
 
 const Database = require("../modules/Database").database
 const dataPath = './database/data.sql'
+const databasePath = './database/smart_home.db'
 
 const exec = require("../modules/execute")
 
@@ -13,6 +14,20 @@ describe('Database', () => {
         this.db = await new Database()
         await insertFakeData(this.db)
     });
+
+    describe('Instantiation', () => {
+        test('Database class can be instantiated', async done => {
+            expect.assertions(0)
+            try {
+                const DatabaseInstance = await new Database(databasePath)
+                done()
+            } catch(err) {
+                done.fail('Database could not be instantiated correctly')
+            } finally {
+                done()
+            }
+        })
+    })
 
     describe('getAllSensorData()', () => {
         test('Error is thrown if username is null', async done => {
