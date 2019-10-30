@@ -90,6 +90,32 @@ describe('Database', () => {
     })
 
 	describe('getRangeData()', () => {
+        test('Error is thrown if username is null', async done => {
+            expect.assertions(1)
+            const userName = null
+            const startDate = new Date(2019,7,1,0,0,0,0)
+            const endDate = new Date(2019,7,2,0,0,0,0)
+            await expect(this.db.getRangeData(userName,startDate,endDate)).rejects.toEqual(Error('Please provide a username'))
+            done()
+        })
+
+        test('Error is thrown if username is blank', async done => {
+            expect.assertions(1)
+            const userName = ''
+            const startDate = new Date(2019,7,1,0,0,0,0)
+            const endDate = new Date(2019,7,2,0,0,0,0)
+            await expect(this.db.getRangeData(userName,startDate,endDate)).rejects.toEqual(Error('Please provide a username'))
+            done()
+        })
+
+        test('Error is thrown if username is not a string', async done => {
+            expect.assertions(1)
+            const userName = 123
+            const startDate = new Date(2019,7,1,0,0,0,0)
+            const endDate = new Date(2019,7,2,0,0,0,0)
+            await expect(this.db.getRangeData(userName,startDate,endDate)).rejects.toEqual(Error('Please provide a username'))
+            done()
+        })
         test('database select range - start date after end date', async done => {
             expect.assertions(1)
             const startDate = new Date()

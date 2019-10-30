@@ -61,21 +61,22 @@ class database {
 	}
 
 	async getRangeData(userName, startDate, endDate) {
-			if (endDate < startDate) throw new Error('Start date must be before end date')
-			const searchStartDate = await getDateFormat(startDate)
-			const searchEndDate= await getDateFormat(endDate)
-			const sql = `SELECT se.sensorName
-							, se.location
-							, d.value
-							, d.dateRecorded 
-						FROM data d
-							INNER JOIN sensors se on se.sensorName = d.sensorName
-							INNER JOIN subscriptions su on su.sensorName = se.sensorName
-							INNER JOIN users u on u.userName = su.userName
-						WHERE u.userName = '${userName}'
-							AND d.dateRecorded BETWEEN su.EFFECT_FROM_DATE AND EFFECT_TO_DATE
-							AND d.dateRecorded BETWEEN '${searchStartDate}' AND '${searchEndDate}';`
-			return await this.db.all(sql)
+		if (userName === null || userName === '' || typeof userName !== 'string') throw new Error('Please provide a username')
+		if (endDate < startDate) throw new Error('Start date must be before end date')
+		const searchStartDate = await getDateFormat(startDate)
+		const searchEndDate= await getDateFormat(endDate)
+		const sql = `SELECT se.sensorName
+						, se.location
+						, d.value
+						, d.dateRecorded 
+					FROM data d
+						INNER JOIN sensors se on se.sensorName = d.sensorName
+						INNER JOIN subscriptions su on su.sensorName = se.sensorName
+						INNER JOIN users u on u.userName = su.userName
+					WHERE u.userName = '${userName}'
+						AND d.dateRecorded BETWEEN su.EFFECT_FROM_DATE AND EFFECT_TO_DATE
+						AND d.dateRecorded BETWEEN '${searchStartDate}' AND '${searchEndDate}';`
+		return await this.db.all(sql)
 	}
 
 	async getTodaysData(userName) {
