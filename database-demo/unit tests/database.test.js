@@ -109,19 +109,12 @@ describe('Database', () => {
             }
         })
 
-        xtest('database returns error if endDate is not a date', async done => {
+        test('database returns error if endDate is not a date', async done => {
             expect.assertions(1)
-            try {
-                const startDate = new Date(2019,1,1,0,0,0)
-                const endDate = '123'
-                await this.db.getStatistics('test','temp1',startDate,endDate)
-                done.fail('test failed')
-            } catch(err) {
-                console.log(err)
-                expect(err.message).toBe('Please provide a fdsfdsf end date')
-            } finally {
-                done()
-            }
+            const startDate = new Date(2019,1,1,0,0,0)
+            const endDate = '123'
+            await expect(this.db.getStatistics('test','temp1',startDate,endDate)).rejects.toEqual(Error('Please provide a valid end date') )
+            done()
         })
         test('database returns error if endDate is before startDate', async done => {
             expect.assertions(1)
