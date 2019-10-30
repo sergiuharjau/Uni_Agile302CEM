@@ -96,6 +96,7 @@ class database {
 	}
 
 	async getStatistics(userName, sensorName, startDate, endDate) {
+		if (userName === null || userName === '' || typeof userName !== 'string') throw new Error('Please provide a username')
 		/*
 		Check using Object.prototype was found at the following site
 		Title: How to check whether an object is a date?

@@ -116,6 +116,7 @@ describe('Database', () => {
             await expect(this.db.getRangeData(userName,startDate,endDate)).rejects.toEqual(Error('Please provide a username'))
             done()
         })
+
         test('database select range - start date after end date', async done => {
             expect.assertions(1)
             const startDate = new Date()
@@ -171,6 +172,7 @@ describe('Database', () => {
             await expect(this.db.getTodaysData(userName)).rejects.toEqual(Error('Please provide a username'))
             done()
         })
+
         test('database returns 0 where there is no data today', async done => {
             expect.assertions(1)
             const userName = 'test'
@@ -181,27 +183,63 @@ describe('Database', () => {
     })
     
     describe('getStatistics()', () => {
+        test('Error is thrown if username is null', async done => {
+            expect.assertions(1)
+            const userName = null
+            const sensorName = 'temp1'
+            const startDate = new Date(2019,1,1,0,0,0)
+            const endDate = new Date(2020,1,1,0,0,0)
+            await expect(this.db.getStatistics(userName,sensorName,startDate,endDate)).rejects.toEqual(Error('Please provide a username'))
+            done()
+        })
+
+        test('Error is thrown if username is blank', async done => {
+            expect.assertions(1)
+            const userName = ''
+            const sensorName = 'temp1'
+            const startDate = new Date(2019,1,1,0,0,0)
+            const endDate = new Date(2020,1,1,0,0,0)
+            await expect(this.db.getStatistics(userName,sensorName,startDate,endDate)).rejects.toEqual(Error('Please provide a username'))
+            done()
+        })
+
+        test('Error is thrown if username is not a string', async done => {
+            expect.assertions(1)
+            const userName = 123
+            const sensorName = 'temp1'
+            const startDate = new Date(2019,1,1,0,0,0)
+            const endDate = new Date(2020,1,1,0,0,0)
+            await expect(this.db.getStatistics(userName,sensorName,startDate,endDate)).rejects.toEqual(Error('Please provide a username'))
+            done()
+        })
+
         test('database returns error if startDate is not a date', async done => {
             expect.assertions(1)
+            const userName = 'test'
+            const sensorName = 'temp1'
             const startDate = '123'
             const endDate = new Date(2019,12,31,23,59,59)
-            await expect(this.db.getStatistics('test','temp1',startDate,endDate)).rejects.toEqual(Error('Please provide a valid start date'))
+            await expect(this.db.getStatistics(userName,sensorName,startDate,endDate)).rejects.toEqual(Error('Please provide a valid start date'))
             done()
         })
 
         test('database returns error if endDate is not a date', async done => {
             expect.assertions(1)
+            const userName = 'test'
+            const sensorName = 'temp1'
             const startDate = new Date(2019,1,1,0,0,0)
             const endDate = '123'
-            await expect(this.db.getStatistics('test','temp1',startDate,endDate)).rejects.toEqual(Error('Please provide a valid end date') )
+            await expect(this.db.getStatistics(userName,sensorName,startDate,endDate)).rejects.toEqual(Error('Please provide a valid end date') )
             done()
         })
 
         test('database returns error if endDate is before startDate', async done => {
             expect.assertions(1)
+            const userName = 'test'
+            const sensorName = 'temp1'
             const startDate = new Date(2019,1,1,0,0,0)
             const endDate = new Date(2018,1,1,0,0,0)
-            await expect(this.db.getStatistics('test','temp1',startDate,endDate)).rejects.toEqual(Error('Please provide an endDate that is after the startDate'))
+            await expect(this.db.getStatistics(userName,sensorName,startDate,endDate)).rejects.toEqual(Error('Please provide an endDate that is after the startDate'))
             done()
         })
     })
