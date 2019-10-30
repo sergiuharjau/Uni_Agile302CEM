@@ -52,6 +52,27 @@ describe('Database', () => {
     })
 
     describe('latestReading()', () => {
+        test('Error is thrown if username is null', async done => {
+            expect.assertions(1)
+            const userName = null
+            await expect(this.db.latestReading(userName)).rejects.toEqual(Error('Please provide a username'))
+            done()
+        })
+
+        test('Error is thrown if username is blank', async done => {
+            expect.assertions(1)
+            const userName = ''
+            await expect(this.db.latestReading(userName)).rejects.toEqual(Error('Please provide a username'))
+            done()
+        })
+
+        test('Error is thrown if username is not a string', async done => {
+            expect.assertions(1)
+            const userName = 123
+            await expect(this.db.latestReading(userName)).rejects.toEqual(Error('Please provide a username'))
+            done()
+        })
+
         test('User can select the latest reading', async done => {
             expect.assertions(2)
             const data = await this.db.latestReading('test')
