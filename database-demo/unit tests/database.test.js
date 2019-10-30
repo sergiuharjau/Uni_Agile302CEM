@@ -228,7 +228,7 @@ describe('Database', () => {
             done()
         })
 
-        test('database returns error if startDate is not a date', async done => {
+        test('Error is thrown if startDate is not a date', async done => {
             expect.assertions(1)
             const userName = 'test'
             const sensorName = 'temp1'
@@ -238,7 +238,7 @@ describe('Database', () => {
             done()
         })
 
-        test('database returns error if endDate is not a date', async done => {
+        test('Error is thrown if endDate is not a date', async done => {
             expect.assertions(1)
             const userName = 'test'
             const sensorName = 'temp1'
@@ -248,13 +248,24 @@ describe('Database', () => {
             done()
         })
 
-        test('database returns error if endDate is before startDate', async done => {
+        test('Error is thrown if endDate is before startDate', async done => {
             expect.assertions(1)
             const userName = 'test'
             const sensorName = 'temp1'
             const startDate = new Date(2019,1,1,0,0,0)
             const endDate = new Date(2018,1,1,0,0,0)
             await expect(this.db.getStatistics(userName,sensorName,startDate,endDate)).rejects.toEqual(Error('Please provide an endDate that is after the startDate'))
+            done()
+        })
+
+        test('No data returned if sensorName does not exist', async done => {
+            expect.assertions(1)
+            const userName = 'test'
+            const sensorName = 'fakeName'
+            const startDate = new Date(2019,1,1,0,0,0)
+            const endDate = new Date(2020,1,1,0,0,0)
+            const data = await this.db.getStatistics(userName,sensorName,startDate,endDate)
+            expect(data.length).toBe(0)
             done()
         })
     })

@@ -116,10 +116,10 @@ class database {
 						INNER JOIN subscriptions su on su.sensorName = se.sensorName
 						INNER JOIN users u on u.userName = su.userName
 					WHERE u.userName = '${userName}'
-						AND d.dateRecorded BETWEEN su.EFFECT_FROM_DATE AND EFFECT_TO_DATE
-						AND (${sensorName} IS NULL OR s.sensorName = ${sensorName})
-						AND ((${searchStartDate} IS NULL OR ${searchEndDate} IS NULL) OR d.dateRecorded BETWEEN ${searchStartDate} AND ${searchEndDate})
-					GROUP BY s.sensorName;`
+						AND d.dateRecorded BETWEEN su.EFFECT_FROM_DATE AND su.EFFECT_TO_DATE
+						AND ('${sensorName}' IS NULL OR se.sensorName = '${sensorName}')
+						AND (('${searchStartDate}' IS NULL OR '${searchEndDate}' IS NULL) OR d.dateRecorded BETWEEN '${searchStartDate}' AND '${searchEndDate}')
+					GROUP BY se.sensorName;`
 		return await this.db.all(sql)
 	}
 }
