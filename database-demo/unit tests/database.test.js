@@ -22,6 +22,20 @@ describe('Database', () => {
             done()
         })
 
+        test('Error is thrown if username is blank', async done => {
+            expect.assertions(1)
+            const userName = ''
+            await expect(this.db.getAllSensorData(userName)).rejects.toEqual(Error('Please provide a username'))
+            done()
+        })
+
+        test('Error is thrown if username is not a string', async done => {
+            expect.assertions(1)
+            const userName = 123
+            await expect(this.db.getAllSensorData(userName)).rejects.toEqual(Error('Please provide a username'))
+            done()
+        })
+
         test('user can select all their data', async done => {
             expect.assertions(1)
             const data = await this.db.getAllSensorData('test')

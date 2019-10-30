@@ -20,7 +20,7 @@ class database {
 	}
 
 	async getAllSensorData(userName) {
-		if (userName === null ) throw new Error('Please provide a username')
+		if (userName === null || userName === '' || typeof userName !== 'string') throw new Error('Please provide a username')
 		const sql = `SELECT se.sensorName
 					, se.location
 					, d.value
