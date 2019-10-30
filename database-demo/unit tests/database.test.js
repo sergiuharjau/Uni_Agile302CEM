@@ -268,6 +268,19 @@ describe('Database', () => {
             expect(data.length).toBe(0)
             done()
         })
+
+        test('Valid data returned when no dates are provided', async done => {
+            expect.assertions(3)
+            const userName = 'test'
+            const sensorName = 'temp1'
+            const startDate = null
+            const endDate = null
+            const data = await this.db.getStatistics(userName,sensorName,startDate,endDate)
+            expect(data.length).toBe(1)
+            expect(data[0].sensorName).toBe('temp1')
+            expect(data[0].location).toBe('Kitchen')
+            done()
+        })
     })
 })
 

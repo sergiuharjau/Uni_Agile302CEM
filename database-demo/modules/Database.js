@@ -100,11 +100,23 @@ class database {
 		Date Accessed: 29th October 2019
 		URL: https://stackoverflow.com/questions/643782/how-to-check-whether-an-object-is-a-date
 		*/
-		if (Object.prototype.toString.call(startDate) !== '[object Date]') throw new Error('Please provide a valid start date')
-		if (Object.prototype.toString.call(endDate) !== '[object Date]') throw new Error('Please provide a valid end date')
+		var searchStartDate = null
+		var searchEndDate = null
+		if (Object.prototype.toString.call(startDate) === '[object Date]') {
+			searchStartDate = await getDateFormat(startDate)
+		} else if(startDate !== null) {
+			throw new Error('Please provide a valid start date')
+		}
+
+		if (Object.prototype.toString.call(endDate) === '[object Date]'  ) {
+			searchEndDate = await getDateFormat(endDate)
+		} else if (startDate !== null) {
+			throw new Error('Please provide a valid end date')
+		}
+
 		if (endDate < startDate) throw new Error('Please provide an endDate that is after the startDate')
-		const searchStartDate = await getDateFormat(startDate)
-		const searchEndDate = await getDateFormat(endDate)
+
+
 		
 		const sql = `SELECT se.sensorName
 						, se.location
@@ -118,7 +130,7 @@ class database {
 					WHERE u.userName = '${userName}'
 						AND d.dateRecorded BETWEEN su.EFFECT_FROM_DATE AND su.EFFECT_TO_DATE
 						AND ('${sensorName}' IS NULL OR se.sensorName = '${sensorName}')
-						AND (('${searchStartDate}' IS NULL OR '${searchEndDate}' IS NULL) OR d.dateRecorded BETWEEN '${searchStartDate}' AND '${searchEndDate}')
+						AND (('${searchStartDate}' = 'null' OR '${searchEndDate}' = 'null') OR d.dateRecorded BETWEEN '${searchStartDate}' AND '${searchEndDate}')
 					GROUP BY se.sensorName;`
 		return await this.db.all(sql)
 	}
