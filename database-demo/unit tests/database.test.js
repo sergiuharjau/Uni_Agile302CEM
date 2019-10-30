@@ -118,16 +118,10 @@ describe('Database', () => {
         })
         test('database returns error if endDate is before startDate', async done => {
             expect.assertions(1)
-            try {
-                const startDate = new Date(2019,1,1,0,0,0)
-                const endDate = new Date(2018,1,1,0,0,0)
-                await this.db.getStatistics('test','temp1',startDate,endDate)
-                done.fail('test failed')
-            } catch(err) {
-                expect(err.message).toBe('Please provide an endDate that is after the startDate')
-            } finally {
-                done()
-            }
+            const startDate = new Date(2019,1,1,0,0,0)
+            const endDate = new Date(2018,1,1,0,0,0)
+            await expect(this.db.getStatistics('test','temp1',startDate,endDate)).rejects.toEqual(Error('Please provide an endDate that is after the startDate'))
+            done()
         })
     })
 })
