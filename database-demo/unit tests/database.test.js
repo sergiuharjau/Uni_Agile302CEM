@@ -151,9 +151,30 @@ describe('Database', () => {
     })
 
     describe('getTodaysData()', () => {
+        test('Error is thrown if username is null', async done => {
+            expect.assertions(1)
+            const userName = null
+            await expect(this.db.getTodaysData(userName)).rejects.toEqual(Error('Please provide a username'))
+            done()
+        })
+
+        test('Error is thrown if username is blank', async done => {
+            expect.assertions(1)
+            const userName = ''
+            await expect(this.db.getTodaysData(userName)).rejects.toEqual(Error('Please provide a username'))
+            done()
+        })
+
+        test('Error is thrown if username is not a string', async done => {
+            expect.assertions(1)
+            const userName = 123
+            await expect(this.db.getTodaysData(userName)).rejects.toEqual(Error('Please provide a username'))
+            done()
+        })
         test('database returns 0 where there is no data today', async done => {
             expect.assertions(1)
-            const data = await this.db.getTodaysData('test')
+            const userName = 'test'
+            const data = await this.db.getTodaysData(userName)
             await expect(data.length).toEqual(0)
             done()
         })
