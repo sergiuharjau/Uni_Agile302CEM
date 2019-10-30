@@ -15,6 +15,13 @@ describe('Database', () => {
     });
 
     describe('getAllSensorData()', () => {
+        test('Error is thrown if username is null', async done => {
+            expect.assertions(1)
+            const userName = null
+            await expect(this.db.getAllSensorData(userName)).rejects.toEqual(Error('Please provide a username'))
+            done()
+        })
+
         test('user can select all their data', async done => {
             expect.assertions(1)
             const data = await this.db.getAllSensorData('test')
@@ -50,17 +57,14 @@ describe('Database', () => {
 	describe('getRangeData()', () => {
         test('database select range - start date after end date', async done => {
             expect.assertions(1)
-    
             const startDate = new Date()
             const endDate = new Date(new Date()- 120000000) 
-            
             await expect(this.db.getRangeData('test',startDate,endDate)).rejects.toEqual( Error('Start date must be before end date'))
             done()
         })
     
         test('database select range - retrieve data for a specified date', async done => {
             expect.assertions(1)
-    
             const startDate = new Date(2019,7,1,0,0,0,0)
             const endDate = new Date(2019,7,2,0,0,0,0)
             const data = await this.db.getRangeData('test',startDate,endDate)
@@ -97,16 +101,10 @@ describe('Database', () => {
     describe('getStatistics()', () => {
         test('database returns error if startDate is not a date', async done => {
             expect.assertions(1)
-            try {
-                const startDate = '123'
-                const endDate = new Date(2019,12,31,23,59,59)
-                await this.db.getStatistics('test','temp1',startDate,endDate)
-                done.fail('test failed')
-            } catch(err) {
-                expect(err.message).toBe('Please provide a valid start date')
-            } finally {
-                done()
-            }
+            const startDate = '123'
+            const endDate = new Date(2019,12,31,23,59,59)
+            await expect(this.db.getStatistics('test','temp1',startDate,endDate)).rejects.toEqual(Error('Please provide a valid start date'))
+            done()
         })
 
         test('database returns error if endDate is not a date', async done => {
@@ -116,6 +114,7 @@ describe('Database', () => {
             await expect(this.db.getStatistics('test','temp1',startDate,endDate)).rejects.toEqual(Error('Please provide a valid end date') )
             done()
         })
+
         test('database returns error if endDate is before startDate', async done => {
             expect.assertions(1)
             const startDate = new Date(2019,1,1,0,0,0)

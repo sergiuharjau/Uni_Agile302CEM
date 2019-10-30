@@ -20,21 +20,18 @@ class database {
 	}
 
 	async getAllSensorData(userName) {
-		try {
-			const sql = `SELECT se.sensorName
-						, se.location
-						, d.value
-						, d.dateRecorded 
-					FROM data d
-						INNER JOIN sensors se on se.sensorName = d.sensorName
-						INNER JOIN subscriptions su on su.sensorName = se.sensorName
-						INNER JOIN users u on u.userName = su.userName
-					WHERE u.userName = '${userName}'
-						AND d.dateRecorded BETWEEN su.EFFECT_FROM_DATE AND EFFECT_TO_DATE;`
-						return await this.db.all(sql)
-		} catch (err){
-			return err
-		}
+		if (userName === null ) throw new Error('Please provide a username')
+		const sql = `SELECT se.sensorName
+					, se.location
+					, d.value
+					, d.dateRecorded 
+				FROM data d
+					INNER JOIN sensors se on se.sensorName = d.sensorName
+					INNER JOIN subscriptions su on su.sensorName = se.sensorName
+					INNER JOIN users u on u.userName = su.userName
+				WHERE u.userName = '${userName}'
+					AND d.dateRecorded BETWEEN su.EFFECT_FROM_DATE AND EFFECT_TO_DATE;`
+					return await this.db.all(sql)
 	}
 
 	async insertData(line, testing = false) {
