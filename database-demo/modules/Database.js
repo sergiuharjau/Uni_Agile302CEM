@@ -7,15 +7,11 @@ const dataFile = './database/createDbFile.sql'
 class database {
 	constructor(dbName=':memory:') {
 		return (async() => {
-			try {
-				this.db = await sqlite.open(dbName);
-				if (dbName === ':memory:') {
-					this.db = await createDatabaseStructure(this.db)
-				}
-				return this
-			} catch (error) {
-				console.log(error)
+			this.db = await sqlite.open(dbName);
+			if (dbName === ':memory:') {
+				this.db = await createDatabaseStructure(this.db)
 			}
+			return this
 		})()
 	}
 
