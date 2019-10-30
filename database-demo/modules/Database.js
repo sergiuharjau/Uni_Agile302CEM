@@ -116,8 +116,6 @@ class database {
 
 		if (endDate < startDate) throw new Error('Please provide an endDate that is after the startDate')
 
-
-		
 		const sql = `SELECT se.sensorName
 						, se.location
 						, ROUND(MIN(d.value),2) minValue
@@ -129,7 +127,7 @@ class database {
 						INNER JOIN users u on u.userName = su.userName
 					WHERE u.userName = '${userName}'
 						AND d.dateRecorded BETWEEN su.EFFECT_FROM_DATE AND su.EFFECT_TO_DATE
-						AND ('${sensorName}' IS NULL OR se.sensorName = '${sensorName}')
+						AND ('${sensorName}' = 'null' OR se.sensorName = '${sensorName}')
 						AND (('${searchStartDate}' = 'null' OR '${searchEndDate}' = 'null') OR d.dateRecorded BETWEEN '${searchStartDate}' AND '${searchEndDate}')
 					GROUP BY se.sensorName;`
 		return await this.db.all(sql)

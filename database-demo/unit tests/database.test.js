@@ -284,6 +284,34 @@ describe('Database', () => {
             expect(data[0].maxValue).toBe(30)
             done()
         })
+
+        test('Valid data returned when no optional parameters are provided', async done => {
+            expect.assertions(16)
+            const userName = 'test'
+            const sensorName = null
+            const startDate = null
+            const endDate = null
+            const data = await this.db.getStatistics(userName,sensorName,startDate,endDate)
+            expect(data.length).toBe(3)
+            expect(data[0].sensorName).toBe('temp1')
+            expect(data[0].location).toBe('Kitchen')
+            expect(data[0].minValue).toBe(1)
+            expect(data[0].averageValue).toBe(14.72)
+            expect(data[0].maxValue).toBe(30)
+
+            expect(data[1].sensorName).toBe('temp2')
+            expect(data[1].location).toBe('Lounge')
+            expect(data[1].minValue).toBe(1)
+            expect(data[1].averageValue).toBe(14.44)
+            expect(data[1].maxValue).toBe(30)
+
+            expect(data[2].sensorName).toBe('temp3')
+            expect(data[2].location).toBe('Master Bedroom')
+            expect(data[2].minValue).toBe(1)
+            expect(data[2].averageValue).toBe(15.78)
+            expect(data[2].maxValue).toBe(30)
+            done()
+        })
     })
 })
 
