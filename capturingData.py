@@ -2,50 +2,70 @@ import paho.mqtt.client as mqtt #import the client1
 import sqlite3
 import json
 from sqlite3 import Error
-global db 
+import time 
 
-def on_message(client, userdata, msg):
-    print(msg.topic+":\n"+str(msg.payload.decode()))
-    insertIntoSQL(msg.payload)
+class Capturing():
+    
+    db = None 
 
-def insertIntoSQL(jsonString):
+    def __init__(self):
+        pass
 
-    try:
-        sql =  '''INSERT INTO data(sensorName, value, dateRecorded)
-                  VALUES(?,?,?); '''
-        cur = db.cursor()
-        data = json.loads(jsonString.decode())
-        tuple = (data["label"], data["value"], data["time"])
-        cur.execute(sql, tuple)
-        cur.execute("COMMIT;")
-    except Error as e:
-        print("Sql error: ", e)
+    @staticmethod
+    def on_message(client, userdata, msg):
+        #print(msg.topic+":\n"+str(msg.payload.decode()))
+        Capturing.insertIntoSQL(msg.payload)
+   
+    @staticmethod
+    def insertIntoSQL(jsonString):
 
-def runMQTT():
-    broker_address = "mqtt.coventry.ac.uk" 
-    broker_port = 8883
+        try:
+            sql =  '''INSERT INTO data(sensorName, value, dateRecorded)
+                        VALUES(?,?,?); '''
 
-    user = "302CEM"
-    password = "n3fXXFZrjw"
+            cur = Capturing.db.cursor()
 
-    client = mqtt.Client() #create new instance
+            data = json.loads(jsonString.decode())
+            tuple = (data["label"], data["value"], data["time"])
+            cur.execute(sql, tuple)
+            cur.execute("COMMIT;")
 
-    client.username_pw_set(user, password)
+        except Error as e:
+            print("Sql error: ", e)
 
-    client.on_message = on_message
-    client.tls_set("/home/pi/Downloads/mqtt.crt")
-    client.connect(broker_address, broker_port) #connect to broker
+    @staticmethod
+    def runMQTT(testing=None):
+        broker_address = "mqtt.coventry.ac.uk" 
+        broker_port = 8883
 
-    client.subscribe("302CEM/placeholder/message/#")
+        user = "302CEM"
+        password = "n3fXXFZrjw"
 
-    client.loop_forever()
+        client = mqtt.Client() #create new instance
+
+        client.username_pw_set(user, password)
+
+        client.on_message = Capturing.on_message
+        client.tls_set("/home/pi/Downloads/mqtt.crt")
+        client.connect(broker_address, broker_port) #connect to broker
+
+        client.subscribe("302CEM/placeholder/sensors/#")
+
+        client.loop_start()
+        
+        startTime = time.time()
+        if testing:
+            #print("Listening")
+            while time.time() - startTime < 0.15:
+                pass
+            client.loop_stop()
 
 if __name__ == "__main__":
-    global db
+
     try:
-        db = sqlite3.connect("../../Documents/database-demo/database/smart_home.db")
+        Capturing.db = sqlite3.connect("/home/pi/Documents/AgilePlaceholder/database-demo/database/smart_home.db")
         print("No errors.")
     except Error as e:
         raise(e)
 
-    runMQTT() # this runs forever
+    Capturing.runMQTT() # this runs forever
