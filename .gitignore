@@ -4,3 +4,4 @@ node_modules/
 coverage/
 *.db
 screenshots/*
+__pycache__/
