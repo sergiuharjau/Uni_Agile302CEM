@@ -60,8 +60,9 @@ class Capturing():
                 pass
             client.loop_stop()
 
-if __name__ == "__main__":
 
+if __name__ == "__main__":
+  
     try:
         Capturing.db = sqlite3.connect("/home/pi/Documents/AgilePlaceholder/database-demo/database/smart_home.db")
         print("No errors.")
