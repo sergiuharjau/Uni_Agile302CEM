@@ -20,21 +20,21 @@ def publish(message):
     client.tls_set("/home/pi/Downloads/mqtt.crt")
     client.connect(broker_address, broker_port) #connect to broker
 
-    time.sleep(0.13)
+    time.sleep(0.5)
     client.publish("302CEM/placeholder/sensors/test", message)
 
 def createDB():
 
     cur = capturingData.Capturing.db.cursor()
 
-    for line in open("/home/pi/Documents/AgilePlaceholder/database-demo/database/createDbFile.sql", "r").readlines():
+    for line in open("/home/pi/Downloads/AgilePlaceholder/database-demo/database/createDbFile.sql", "r").readlines():
         cur.execute(line)
 
 def insertFakeData():
 
     cur = capturingData.Capturing.db.cursor()
     i = 0
-    for line in open("/home/pi/Documents/AgilePlaceholder/database-demo/database/data.sql", "r").readlines():
+    for line in open("/home/pi/Downloads/AgilePlaceholder/database-demo/database/data.sql", "r").readlines():
         cur.execute(line)
         cur.execute("COMMIT;")
 
@@ -73,6 +73,7 @@ if __name__ == "__main__":
     capturingData.Capturing.runMQTT(testing=True)
 
     t.join()
+#    print(readAllData())
     if len(readAllData()) == 5:
         print("Passed.")
     else:

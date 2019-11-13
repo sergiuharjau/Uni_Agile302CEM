@@ -3,7 +3,7 @@ const databasePath = './database/smart_home.db'
 
 async function getAllData () {
 	var database = await new Database(databasePath)
-	var data = await database.getAllSensorData()
+	var data = await database.getAllSensorData('test')
 	await PrintData(data)
 }
 
@@ -41,6 +41,7 @@ async function PrintData (JSONData) {
 		console.log("Date value was recorded: " + element.dateRecorded)
 		console.log("*******************************")
 	});
+	console.log(JSONData.length)
 }
 
 getAllData()
