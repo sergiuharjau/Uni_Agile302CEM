@@ -13,7 +13,7 @@ class Capturing():
 
     @staticmethod
     def on_message(client, userdata, msg):
-        #print(msg.topic+":\n"+str(msg.payload.decode()))
+#        print(msg.topic+":\n"+str(msg.payload.decode()))
         Capturing.insertIntoSQL(msg.payload)
    
     @staticmethod
@@ -24,12 +24,10 @@ class Capturing():
                         VALUES(?,?,?); '''
 
             cur = Capturing.db.cursor()
-
             data = json.loads(jsonString.decode())
             tuple = (data["label"], data["value"], data["time"])
             cur.execute(sql, tuple)
             cur.execute("COMMIT;")
-
         except Error as e:
             print("Sql error: ", e)
 
@@ -51,20 +49,19 @@ class Capturing():
 
         client.subscribe("302CEM/placeholder/sensors/#")
 
-        client.loop_start()
         
         startTime = time.time()
         if testing:
-            #print("Listening")
-            while time.time() - startTime < 0.15:
+            client.loop_start()
+            while time.time() - startTime < 1:
                 pass
             client.loop_stop()
-
+        client.loop_forever()
 
 if __name__ == "__main__":
   
     try:
-        Capturing.db = sqlite3.connect("/home/pi/Documents/AgilePlaceholder/database-demo/database/smart_home.db")
+        Capturing.db = sqlite3.connect("/home/pi/Downloads/AgilePlaceholder/database-demo/database/smart_home.db")
         print("No errors.")
     except Error as e:
         raise(e)
