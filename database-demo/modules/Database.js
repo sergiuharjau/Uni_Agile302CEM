@@ -5,6 +5,10 @@ const readline = require('readline')
 const dataFile = './database/createDbFile.sql'
 
 class database {
+	/**
+	 * Instantiates an instance of the database class
+	 * @param {String} dbName The name of the database to use. By default this will use the in memory database to prevent any misuse
+	 */
 	constructor(dbName=':memory:') {
 		return (async() => {
 			this.db = await sqlite.open(dbName);
