@@ -118,6 +118,16 @@ class database {
 		return await this.db.all(sql)
 	}
 
+	/**
+	 * Return Statistical data such and min, average and max based on the passed in parameters.
+	 * If username is the only one passed in, then all sensors that the user has previously been subscribed to
+	 * will be returned. 
+	 * Note: that both startDate and endDate must be provided to limit the time period
+	 * @param {String} userName The username of the logged in user
+	 * @param {String} sensorName Optional: The name of a specific sensor to retrieve. If left blank then all of the sensors are retrieved 
+	 * @param {Date} startDate Optional: The start date of the range required. If startDate or endDate are null then all data will be returned regardles of time period 
+	 * @param {Date} endDate Optionall: The end date of the range requested. If startDate or endDate are null then all data will be returned regardles of time period
+	 */
 	async getStatistics(userName, sensorName, startDate, endDate) {
 		if (userName === null || userName === '' || typeof userName !== 'string') throw new Error('Please provide a username')
 		/*
