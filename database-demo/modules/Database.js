@@ -5,6 +5,10 @@ const readline = require('readline')
 const dataFile = './database/createDbFile.sql'
 
 class database {
+	/**
+	 * Instantiates an instance of the database class
+	 * @param {String} dbName The name of the database to use. By default this will use the in memory database to prevent any misuse
+	 */
 	constructor(dbName=':memory:') {
 		return (async() => {
 			this.db = await sqlite.open(dbName);
@@ -15,6 +19,10 @@ class database {
 		})()
 	}
 
+	/**
+	 * Get all of the sensor data that the user had access to at anytime
+	 * @param {String} userName The username of the logged in user
+	 */
 	async getAllSensorData(userName) {
 		if (userName === null || userName === '' || typeof userName !== 'string') throw new Error('Please provide a username')
 		const sql = `SELECT se.sensorName
@@ -30,6 +38,11 @@ class database {
 					return await this.db.all(sql)
 	}
 
+	/**
+	 * Executest the sql statemet provided. This is purely for testing purposes and shouldn't be used in the real world
+	 * @param {String} line SQL string to execute
+	 * @param {boolean} testing Indicates whether this is for testing or not
+	 */
 	async insertData(line, testing = false) {
 		try {
 			if (testing === false) throw new Error("This is for testing only.")
@@ -40,6 +53,10 @@ class database {
 		}
 	}
 
+	/**
+	 * Retrieves the latest reading for the passed in user
+	 * @param {String} userName The username of the logged in user
+	 */
 	async latestReading(userName) {
 		if (userName === null || userName === '' || typeof userName !== 'string') throw new Error('Please provide a username')
 		const sql = `SELECT se.sensorName
@@ -56,6 +73,12 @@ class database {
 		return await this.db.all(sql)
 	}
 
+	/**
+	 * Return all of the data for the specified user within the date period specified
+	 * @param {String} userName Username of the passed in user
+	 * @param {Date} startDate The start date for the range 
+	 * @param {Date} endDate The end date for the range
+	 */
 	async getRangeData(userName, startDate, endDate) {
 		if (userName === null || userName === '' || typeof userName !== 'string') throw new Error('Please provide a username')
 		if (endDate < startDate) throw new Error('Start date must be before end date')
@@ -75,6 +98,10 @@ class database {
 		return await this.db.all(sql)
 	}
 
+	/**
+	 * Retrieves all of todays data for the specified user which they were subscribed to
+	 * @param {String} userName The username of the logged in user
+	 */
 	async getTodaysData(userName) {
 		if (userName === null || userName === '' || typeof userName !== 'string') throw new Error('Please provide a username')
 		const sql = `SELECT se.sensorName
@@ -91,6 +118,16 @@ class database {
 		return await this.db.all(sql)
 	}
 
+	/**
+	 * Return Statistical data such and min, average and max based on the passed in parameters.
+	 * If username is the only one passed in, then all sensors that the user has previously been subscribed to
+	 * will be returned. 
+	 * Note: that both startDate and endDate must be provided to limit the time period
+	 * @param {String} userName The username of the logged in user
+	 * @param {String} sensorName Optional: The name of a specific sensor to retrieve. If left blank then all of the sensors are retrieved 
+	 * @param {Date} startDate Optional: The start date of the range required. If startDate or endDate are null then all data will be returned regardles of time period 
+	 * @param {Date} endDate Optionall: The end date of the range requested. If startDate or endDate are null then all data will be returned regardles of time period
+	 */
 	async getStatistics(userName, sensorName, startDate, endDate) {
 		if (userName === null || userName === '' || typeof userName !== 'string') throw new Error('Please provide a username')
 		/*
@@ -164,6 +201,12 @@ class database {
 	}
 }
 
+/**
+ * Takes in a date object and returns the appropriate format for the database
+ * @private
+ * @param {Date} date And date object
+ * @returns {String} Return a string with the date in the correct database formay
+ */
 async function getDateFormat(date){
 	new Date().getMonth()
 	const year = date.getFullYear()
@@ -177,10 +220,26 @@ async function getDateFormat(date){
 	return year+'-'+month+'-'+day+' '+hour+':'+minutes+':'+seconds
 }
 
+/**
+ * Converts the string from a single digits to 2 digits
+ * For example if 1 is passed in, then we return 01
+ * If 11 is provided then we return 11.
+ * The reason for this is that the database requires data to all be 2 characters
+ * in length hence the adding of a 0 in a single digit instance
+ * @private
+ * @param {String} component
+ * @returns {String} Returns a digit string
+ */
 async function formatDatePart(component){
 	return component.toString().padStart(2,'0')
 }
 
+/**
+ * Created the appropriate database structure using the provided database object
+ * This is used for the in memory database testing.
+ * DO NOT use for production purposes as it may alter the database
+ * @param {database} db Passes in a database object
+ */
 async function createDatabaseStructure(db) {
     const fileStream = fs.createReadStream(dataFile);
     
