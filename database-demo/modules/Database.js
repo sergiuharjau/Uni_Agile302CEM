@@ -38,6 +38,11 @@ class database {
 					return await this.db.all(sql)
 	}
 
+	/**
+	 * Executest the sql statemet provided. This is purely for testing purposes and shouldn't be used in the real world
+	 * @param {String} line SQL string to execute
+	 * @param {boolean} testing Indicates whether this is for testing or not
+	 */
 	async insertData(line, testing = false) {
 		try {
 			if (testing === false) throw new Error("This is for testing only.")
