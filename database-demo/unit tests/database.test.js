@@ -388,6 +388,82 @@ describe('Database', () => {
             done()
         })
     })
+
+    describe('unsubscribe()', () => {
+        test('Error is thrown if username is null', async done => {
+            expect.assertions(1)
+            const userName = null
+            const sensorName = 'temp1'
+
+            await expect(this.db.unsubscribe(userName,sensorName))
+                .rejects.toEqual(Error('Please provide a username'))
+            done()
+        })
+
+        test('Error is thrown if username is blank', async done => {
+            expect.assertions(1)
+            const userName = ''
+            const sensorName = 'temp1'
+
+            await expect(this.db.unsubscribe(userName,sensorName))
+                .rejects.toEqual(Error('Please provide a username'))
+            done()
+        })
+
+        test('Error is thrown if username is not a string', async done => {
+            expect.assertions(1)
+            const userName = 123
+            const sensorName = 'temp1'
+
+            await expect(this.db.unsubscribe(userName,sensorName))
+                .rejects.toEqual(Error('Please provide a username'))
+            done()
+        })
+
+        test('Error is thrown if sensorName is null', async done => {
+            expect.assertions(1)
+            const userName = 'test'
+            const sensorName = null
+
+            await expect(this.db.unsubscribe(userName,sensorName))
+                .rejects.toEqual(Error('Please provide a sensor name'))
+            done()
+        })
+
+        test('Error is thrown if sensorName is blank', async done => {
+            expect.assertions(1)
+            const userName = 'test'
+            const sensorName = ''
+
+            await expect(this.db.unsubscribe(userName,sensorName))
+                .rejects.toEqual(Error('Please provide a sensor name'))
+            done()
+        })
+
+        test('Error is thrown if sensorName is not a string', async done => {
+            expect.assertions(1)
+            const userName = 'test'
+            const sensorName = 123
+
+            await expect(this.db.unsubscribe(userName,sensorName))
+                .rejects.toEqual(Error('Please provide a sensor name'))
+            done()
+        })
+
+        test('Unsubscribing does not throw an error', async done => {
+            expect.assertions(1)
+            const userName = 'test'
+            const sensorName = 'temp1'
+
+            try {
+                await this.db.unsubscribe(userName, sensorName)
+                expect(true).toBe(true)
+            } catch (error) {
+                expect(true).toBe(false)
+            }
+            done()
+        })
+    })
 })
 
 async function insertFakeData(db) {
