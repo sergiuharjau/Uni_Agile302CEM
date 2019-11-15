@@ -171,6 +171,11 @@ class database {
 	}
 }
 
+/**
+ * Takes in a date object and returns the appropriate format for the database
+ * @private
+ * @param {Date} date And date object
+ */
 async function getDateFormat(date){
 	new Date().getMonth()
 	const year = date.getFullYear()
