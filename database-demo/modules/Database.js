@@ -141,7 +141,7 @@ class database {
 	 */
 	async subscribe(username, sensorName){
 		if (username === null || username === '' || typeof username !== 'string') throw new Error('Please provide a username')
-		if (sensorName === null || sensorName === '' || typeof sensorName !== 'string') throw new Error('Please provide a sendor')
+		if (sensorName === null || sensorName === '' || typeof sensorName !== 'string') throw new Error('Please provide a sensor name')
 		const sql = `INSERT INTO subscriptions (username, sensorName) VALUES ('${username}', '${sensorName}');`
 		return await this.db.run(sql)
 	}
