@@ -175,6 +175,7 @@ class database {
  * Takes in a date object and returns the appropriate format for the database
  * @private
  * @param {Date} date And date object
+ * @returns {String} Return a string with the date in the correct database formay
  */
 async function getDateFormat(date){
 	new Date().getMonth()
@@ -189,6 +190,16 @@ async function getDateFormat(date){
 	return year+'-'+month+'-'+day+' '+hour+':'+minutes+':'+seconds
 }
 
+/**
+ * Converts the string from a single digits to 2 digits
+ * For example if 1 is passed in, then we return 01
+ * If 11 is provided then we return 11.
+ * The reason for this is that the database requires data to all be 2 characters
+ * in length hence the adding of a 0 in a single digit instance
+ * @private
+ * @param {String} component
+ * @returns {String} Returns a digit string
+ */
 async function formatDatePart(component){
 	return component.toString().padStart(2,'0')
 }
