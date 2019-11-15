@@ -132,6 +132,19 @@ class database {
 					GROUP BY se.sensorName;`
 		return await this.db.all(sql)
 	}
+
+	/**
+	 * Subscribes the provided user to the provided sensor name. 
+	 * The effect from date will be auto populated by the database
+	 * @param {String} username The username of the logged in user
+	 * @param {String} sensorName The sensor name the user wants to subscribe to
+	 */
+	async subscribe(username, sensorName){
+		if (username === null || username === '' || typeof username !== 'string') throw new Error('Please provide a username')
+		if (sensorName === null || sensorName === '' || typeof sensorName !== 'string') throw new Error('Please provide a sendor')
+		const sql = `INSERT INTO subscriptions (username, sensorName) VALUES ('${username}', '${sensorName}');`
+		return await this.db.run(sql)
+	}
 }
 
 async function getDateFormat(date){
