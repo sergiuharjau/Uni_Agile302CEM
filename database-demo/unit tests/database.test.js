@@ -353,6 +353,16 @@ describe('Database', () => {
                 .rejects.toEqual(Error('Please provide a sensor name'))
             done()
         })
+
+        test('Error is thrown if sensorName is blank', async done => {
+            expect.assertions(1)
+            const userName = 'test'
+            const sensorName = ''
+
+            await expect(this.db.subscribe(userName,sensorName))
+                .rejects.toEqual(Error('Please provide a sensor name'))
+            done()
+        })
     })
 })
 
