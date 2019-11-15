@@ -363,6 +363,16 @@ describe('Database', () => {
                 .rejects.toEqual(Error('Please provide a sensor name'))
             done()
         })
+
+        test('Error is thrown if sensorName is not a string', async done => {
+            expect.assertions(1)
+            const userName = 'test'
+            const sensorName = 123
+
+            await expect(this.db.subscribe(userName,sensorName))
+                .rejects.toEqual(Error('Please provide a sensor name'))
+            done()
+        })
     })
 })
 
