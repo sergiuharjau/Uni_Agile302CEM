@@ -333,6 +333,16 @@ describe('Database', () => {
                 .rejects.toEqual(Error('Please provide a username'))
             done()
         })
+
+        test('Error is thrown if username is not a string', async done => {
+            expect.assertions(1)
+            const userName = 123
+            const sensorName = 'temp1'
+
+            await expect(this.db.subscribe(userName,sensorName))
+                .rejects.toEqual(Error('Please provide a username'))
+            done()
+        })
     })
 })
 
