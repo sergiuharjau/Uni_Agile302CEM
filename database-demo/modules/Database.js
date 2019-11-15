@@ -19,6 +19,10 @@ class database {
 		})()
 	}
 
+	/**
+	 * Get all of the sensor data that the user had access to at anytime
+	 * @param {String} userName The username of the logged in user
+	 */
 	async getAllSensorData(userName) {
 		if (userName === null || userName === '' || typeof userName !== 'string') throw new Error('Please provide a username')
 		const sql = `SELECT se.sensorName
