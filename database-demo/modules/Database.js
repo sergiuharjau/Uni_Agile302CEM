@@ -73,6 +73,12 @@ class database {
 		return await this.db.all(sql)
 	}
 
+	/**
+	 * Return all of the data for the specified user within the date period specified
+	 * @param {String} userName Username of the passed in user
+	 * @param {Date} startDate The start date for the range 
+	 * @param {Date} endDate The end date for the range
+	 */
 	async getRangeData(userName, startDate, endDate) {
 		if (userName === null || userName === '' || typeof userName !== 'string') throw new Error('Please provide a username')
 		if (endDate < startDate) throw new Error('Start date must be before end date')
