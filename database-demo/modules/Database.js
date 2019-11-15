@@ -98,6 +98,10 @@ class database {
 		return await this.db.all(sql)
 	}
 
+	/**
+	 * Retrieves all of todays data for the specified user which they were subscribed to
+	 * @param {String} userName The username of the logged in user
+	 */
 	async getTodaysData(userName) {
 		if (userName === null || userName === '' || typeof userName !== 'string') throw new Error('Please provide a username')
 		const sql = `SELECT se.sensorName
