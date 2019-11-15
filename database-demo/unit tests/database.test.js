@@ -313,6 +313,17 @@ describe('Database', () => {
             done()
         })
     })
+    describe('subscribe()', () => {
+        test('Error is thrown if username is null', async done => {
+            expect.assertions(1)
+            const userName = null
+            const sensorName = 'temp1'
+
+            await expect(this.db.subscribe(userName,sensorName))
+                .rejects.toEqual(Error('Please provide a username'))
+            done()
+        })
+    })
 })
 
 async function insertFakeData(db) {
