@@ -204,6 +204,12 @@ async function formatDatePart(component){
 	return component.toString().padStart(2,'0')
 }
 
+/**
+ * Created the appropriate database structure using the provided database object
+ * This is used for the in memory database testing.
+ * DO NOT use for production purposes as it may alter the database
+ * @param {database} db Passes in a database object
+ */
 async function createDatabaseStructure(db) {
     const fileStream = fs.createReadStream(dataFile);
     
