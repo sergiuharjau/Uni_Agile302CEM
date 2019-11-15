@@ -148,7 +148,7 @@ class database {
 
 	
 	/**
-	 * Unsubscribes the provided user to the provided sensor name. 
+	 * Unsubscribes the provided user from the provided sensor name. 
 	 * @param {String} username The username of the logged in user
 	 * @param {String} sensorName The sensor name the user wants to subscribe to
 	 */
