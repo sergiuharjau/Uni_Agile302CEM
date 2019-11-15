@@ -53,6 +53,10 @@ class database {
 		}
 	}
 
+	/**
+	 * Retrieves the latest reading for the passed in user
+	 * @param {String} userName The username of the logged in user
+	 */
 	async latestReading(userName) {
 		if (userName === null || userName === '' || typeof userName !== 'string') throw new Error('Please provide a username')
 		const sql = `SELECT se.sensorName
