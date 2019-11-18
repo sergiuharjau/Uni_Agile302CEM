@@ -169,6 +169,36 @@ class database {
 					GROUP BY se.sensorName;`
 		return await this.db.all(sql)
 	}
+
+	/**
+	 * Subscribes the provided user to the provided sensor name. 
+	 * The effect from date will be auto populated by the database
+	 * @param {String} username The username of the logged in user
+	 * @param {String} sensorName The sensor name the user wants to subscribe to
+	 */
+	async subscribe(username, sensorName){
+		if (username === null || username === '' || typeof username !== 'string') throw new Error('Please provide a username')
+		if (sensorName === null || sensorName === '' || typeof sensorName !== 'string') throw new Error('Please provide a sensor name')
+		const sql = `INSERT INTO subscriptions (username, sensorName) VALUES ('${username}', '${sensorName}');`
+		return await this.db.run(sql)
+	}
+
+	
+	/**
+	 * Unsubscribes the provided user from the provided sensor name. 
+	 * @param {String} username The username of the logged in user
+	 * @param {String} sensorName The sensor name the user wants to subscribe to
+	 */
+	async unsubscribe(username, sensorName){
+		if (username === null || username === '' || typeof username !== 'string') throw new Error('Please provide a username')
+		if (sensorName === null || sensorName === '' || typeof sensorName !== 'string') throw new Error('Please provide a sensor name')
+		const sql = `UPDATE subscriptions
+					SET EFFECT_TO_DATE = DATETIME('now')
+					WHERE username = '${username}'
+						AND sensorName = '${sensorName}'
+						AND effect_to_date = '9999-12-31 23:59:59';`
+		return await this.db.run(sql)
+	}
 }
 
 /**
