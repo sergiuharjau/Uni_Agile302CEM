@@ -20,6 +20,45 @@ class database {
 	}
 
 	/**
+	 * Inserts a new user into the database
+	 * @param {String} username The username of the new user
+	 * @param {String} password The hashed password of the users inputted passowrd
+	 */
+	async insertUser (username, password) {
+		try {
+			const sql = `INSERT INTO users(username, password) VALUES ('${username}', '${password}');`
+			await this.db.run(sql)
+		} catch (err){
+			if(err.errno === 19) {
+				throw new Error(`${username} already exists.`)
+			}
+		}
+
+	}
+	/**
+	 * Return true or false if the password entered 
+	 * is correct for the specified user.
+	 * @param {String} username The username the user has entered
+	 * @param {String} password The hashed version of the users entered password
+	 * @returns {Boolean} Returns true if the password matches the one stored in the database. Otherwise false
+	 */
+	async validatePassword (username, password){
+		const sql = `SELECT CASE WHEN EXISTS(SELECT 1
+										FROM users
+										WHERE username = '${username}'
+											AND password = '${password}')
+						THEN 1
+						ELSE 0
+					END as VALID;`
+		const data = await this.db.all(sql)
+		if (data[0].VALID === 1) {
+			return true
+		} else {
+			return false
+		}
+	}
+
+	/**
 	 * Get all of the sensor data that the user had access to at anytime
 	 * @param {String} userName The username of the logged in user
 	 */
@@ -128,7 +167,7 @@ class database {
 	 * @param {Date} startDate Optional: The start date of the range required. If startDate or endDate are null then all data will be returned regardles of time period 
 	 * @param {Date} endDate Optionall: The end date of the range requested. If startDate or endDate are null then all data will be returned regardles of time period
 	 */
-	async getStatistics(userName, sensorName, startDate, endDate) {
+	async getTemperatureStatistics(userName, sensorName, startDate, endDate) {
 		if (userName === null || userName === '' || typeof userName !== 'string') throw new Error('Please provide a username')
 		/*
 		Check using Object.prototype was found at the following site
@@ -155,15 +194,16 @@ class database {
 
 		const sql = `SELECT se.sensorName
 						, se.location
-						, ROUND(MIN(d.value),2) minValue
-						, ROUND(AVG(d.value),2) averageValue
-						, ROUND(MAX(d.value),2) maxValue
+						, ROUND(MIN(CAST(d.value AS DECIMAL)),2) minValue
+						, ROUND(AVG(CAST(d.value AS DECIMAL)),2) averageValue
+						, ROUND(MAX(CAST(d.value AS DECIMAL)),2) maxValue
 					FROM data d
 						INNER JOIN sensors se on se.sensorName = d.sensorName
 						INNER JOIN subscriptions su on su.sensorName = se.sensorName
 						INNER JOIN users u on u.userName = su.userName
 					WHERE u.userName = '${userName}'
 						AND d.dateRecorded BETWEEN su.EFFECT_FROM_DATE AND su.EFFECT_TO_DATE
+						AND se.type = 'Temperature'
 						AND ('${sensorName}' = 'null' OR se.sensorName = '${sensorName}')
 						AND (('${searchStartDate}' = 'null' OR '${searchEndDate}' = 'null') OR d.dateRecorded BETWEEN '${searchStartDate}' AND '${searchEndDate}')
 					GROUP BY se.sensorName;`
