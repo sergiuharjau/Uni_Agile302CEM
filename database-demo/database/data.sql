@@ -9,6 +9,9 @@ INSERT INTO subscriptions (_id, username, sensorName, EFFECT_FROM_DATE, EFFECT_T
 INSERT INTO users (username, dateCreated, password) VALUES ('test', '2019-10-25 11:02:14', 'test');
 INSERT INTO users (username, dateCreated, password) VALUES ('test2', '2019-10-25 11:13:43', 'test2');
 INSERT INTO sensorStatus (sensorName, activated, dateRecorded) VALUES ('pir1', true, '2019-07-04 04:07:36'); 
+INSERT INTO sensorStatus (sensorName, activated, dateRecorded) VALUES ('pir1', false, '2019-07-06 04:07:36'); 
+INSERT INTO sensorStatus (sensorName, activated, dateRecorded) VALUES ('gas', false, '2019-07-04 04:07:36');
+INSERT INTO sensorStatus (sensorName, activated, dateRecorded) VALUES ('gas', true, '2019-07-06 04:07:36');
 insert into data (sensorName, value, dateRecorded, dateCreated) values ('temp2', 12, '2019-08-10 01:23:04', '2019-10-07 00:00:00');
 insert into data (sensorName, value, dateRecorded, dateCreated) values ('temp1', 20, '2019-07-16 04:05:20', '2019-10-07 00:00:00');
 insert into data (sensorName, value, dateRecorded, dateCreated) values ('temp3', 23, '2019-07-04 04:07:36', '2019-10-07 00:00:00');
