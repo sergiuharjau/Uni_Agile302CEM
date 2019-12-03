@@ -35,9 +35,6 @@ class database {
 						ELSE 0
 					END as VALID`
 		const data = await this.db.all(sql)
-		console.log(data)
-		console.log(data[0].VALID)
-		console.log(typeof data[0].VALID)
 		if (data[0].VALID === 1) {
 			return true
 		} else {
