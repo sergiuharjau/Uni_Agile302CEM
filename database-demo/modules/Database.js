@@ -29,7 +29,9 @@ class database {
 			const sql = `INSERT INTO users(username, password) VALUES ('${username}', '${password}');`
 			await this.db.run(sql)
 		} catch (err){
-			throw err
+			if(err.errno === 19) {
+				throw new Error(`${username} already exists.`)
+			}
 		}
 
 	}

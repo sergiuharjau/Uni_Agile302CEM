@@ -118,6 +118,15 @@ describe('Database', () => {
             expect(data).toBe(true)
             done()
         })
+
+        test('Appropriate Error message if user already exists', async done => {
+            expect.assertions(1)
+            const username = 'user4'
+            const password = 'password4'
+            await expect(this.db.insertUser(username, password))
+                .rejects.toEqual(Error('user4 already exists.'))
+            done()
+        })
     })
 
     describe('getAllSensorData()', () => {
