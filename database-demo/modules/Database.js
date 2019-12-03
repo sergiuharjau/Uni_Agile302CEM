@@ -78,6 +78,16 @@ class database {
 	}
 
 	/**
+	 * Return the current status of all the activatable sensors
+	 */
+	async getCurrentSensorStatus(){
+		const sql = `SELECT sensorName, activated, MAX(dateRecorded)
+					FROM sensorStatus
+					GROUP BY sensorName`
+		return await this.db.all(sql)
+	}
+
+	/**
 	 * Get all of the sensor data that the user had access to at anytime
 	 * @param {String} userName The username of the logged in user
 	 */

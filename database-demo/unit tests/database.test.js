@@ -169,6 +169,14 @@ describe('Database', () => {
         })
     })
 
+    describe('getSensorStatus()', () => {
+        test('Check we can retrieve the correct number of sensors status', async done => {
+            expect.assertions(1)
+            const data = await this.db.getCurrentSensorStatus()
+            expect(data.length).toBe(2)
+        })
+    })
+
     describe('getAllSensorData()', () => {
         test('Error is thrown if username is null', async done => {
             expect.assertions(1)
