@@ -59,6 +59,25 @@ class database {
 	}
 
 	/**
+	 * Logs whether the provided sensor was activated or not
+	 * @param {String} sensorName The name of the sensor
+	 * @param {Boolean} activated Whenther the sensor was activated/turned on
+	 * @param {Date} dateRecorded Date the reading was recorded
+	 */
+	async logPirActivation (sensorName, activated, dateRecorded) {
+		try {
+			const databaseDate = await getDateFormat(dateRecorded)
+			const sql = `INSERT INTO sensorStatus (sensorName, activated, dateRecorded) 
+						VALUES ('${sensorName}', ${activated}, '${databaseDate}');`
+			await this.db.run(sql)
+		} catch (error) {
+			if(error.errno === 19) {
+				throw new Error('Reading already recorded')
+			}
+		}
+	}
+
+	/**
 	 * Get all of the sensor data that the user had access to at anytime
 	 * @param {String} userName The username of the logged in user
 	 */
@@ -238,25 +257,6 @@ class database {
 						AND sensorName = '${sensorName}'
 						AND effect_to_date = '9999-12-31 23:59:59';`
 		return await this.db.run(sql)
-	}
-
-	/**
-	 * Logs whether the provided sensor was activated or not
-	 * @param {String} sensorName The name of the sensor
-	 * @param {Boolean} activated Whenther the sensor was activated/turned on
-	 * @param {Date} dateRecorded Date the reading was recorded
-	 */
-	async logPirActivation (sensorName, activated, dateRecorded) {
-		try {
-			const databaseDate = await getDateFormat(dateRecorded)
-			const sql = `INSERT INTO sensorStatus (sensorName, activated, dateRecorded) 
-						VALUES ('${sensorName}', ${activated}, '${databaseDate}');`
-			await this.db.run(sql)
-		} catch (error) {
-			if(error.errno === 19) {
-				throw new Error('Reading already recorded')
-			}
-		}
 	}
 }
 
