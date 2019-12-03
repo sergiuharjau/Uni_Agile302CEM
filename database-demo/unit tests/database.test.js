@@ -134,7 +134,21 @@ describe('Database', () => {
             expect.assertions(1)
             const sensorName = 'pir1'
             const activated = true
-            const dateRecorded = new Date()
+            const dateRecorded = new Date(2019,2,1,22,0,0,0)
+            try {
+                await this.db.logPirActivation(sensorName, activated, dateRecorded)
+                expect(true).toBe(true)
+            } catch (error) {
+                expect(true).toBe(false)
+            }
+            done()
+        })
+
+        test('pir sensor can log when motion is without error', async done => {
+            expect.assertions(1)
+            const sensorName = 'pir1'
+            const activated = false
+            const dateRecorded = new Date(2019,1,1,22,0,0,0)
             try {
                 await this.db.logPirActivation(sensorName, activated, dateRecorded)
                 expect(true).toBe(true)
