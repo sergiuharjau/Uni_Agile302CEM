@@ -157,6 +157,16 @@ describe('Database', () => {
             }
             done()
         })
+
+        test('Appropriate message if reading already exists', async done => {
+            expect.assertions(1)
+            const sensorName = 'pir1'
+            const activated = false
+            const dateRecorded = new Date(2019,1,1,22,0,0,0)
+            await expect(this.db.logPirActivation(sensorName, activated, dateRecorded))
+                .rejects.toEqual(Error('Reading already recorded'))
+            done()
+        })
     })
 
     describe('getAllSensorData()', () => {

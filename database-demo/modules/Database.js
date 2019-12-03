@@ -251,10 +251,11 @@ class database {
 			const databaseDate = await getDateFormat(dateRecorded)
 			const sql = `INSERT INTO sensorStatus (sensorName, activated, dateRecorded) 
 						VALUES ('${sensorName}', ${activated}, '${databaseDate}');`
-			console.log(sql)
 			await this.db.run(sql)
 		} catch (error) {
-			throw error
+			if(error.errno === 19) {
+				throw new Error('Reading already recorded')
+			}
 		}
 	}
 }
