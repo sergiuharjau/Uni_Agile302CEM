@@ -129,14 +129,14 @@ describe('Database', () => {
         })
     })
 
-    describe('logPirActivation()', () => {
+    describe('logSensorActivation()', () => {
         test('pir sensor can log motion without error', async done => {
             expect.assertions(1)
             const sensorName = 'pir1'
             const activated = true
             const dateRecorded = new Date(2019,2,1,22,0,0,0)
             try {
-                await this.db.logPirActivation(sensorName, activated, dateRecorded)
+                await this.db.logSensorActivation(sensorName, activated, dateRecorded)
                 expect(true).toBe(true)
             } catch (error) {
                 expect(true).toBe(false)
@@ -150,7 +150,7 @@ describe('Database', () => {
             const activated = false
             const dateRecorded = new Date(2019,1,1,22,0,0,0)
             try {
-                await this.db.logPirActivation(sensorName, activated, dateRecorded)
+                await this.db.logSensorActivation(sensorName, activated, dateRecorded)
                 expect(true).toBe(true)
             } catch (error) {
                 expect(true).toBe(false)
@@ -163,7 +163,7 @@ describe('Database', () => {
             const sensorName = 'pir1'
             const activated = false
             const dateRecorded = new Date(2019,1,1,22,0,0,0)
-            await expect(this.db.logPirActivation(sensorName, activated, dateRecorded))
+            await expect(this.db.logSensorActivation(sensorName, activated, dateRecorded))
                 .rejects.toEqual(Error('Reading already recorded'))
             done()
         })

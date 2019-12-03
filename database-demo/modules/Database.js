@@ -64,7 +64,7 @@ class database {
 	 * @param {Boolean} activated Whenther the sensor was activated/turned on
 	 * @param {Date} dateRecorded Date the reading was recorded
 	 */
-	async logPirActivation (sensorName, activated, dateRecorded) {
+	async logSensorActivation (sensorName, activated, dateRecorded) {
 		try {
 			const databaseDate = await getDateFormat(dateRecorded)
 			const sql = `INSERT INTO sensorStatus (sensorName, activated, dateRecorded) 
