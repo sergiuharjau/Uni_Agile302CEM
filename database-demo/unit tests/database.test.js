@@ -83,6 +83,15 @@ describe('Database', () => {
             expect(data).toBe(true)
             done()
         })
+
+        test('Return 0 if password provided matches a different user', async done => {
+            expect.assertions(1)
+            const username = 'test'
+            const password = 'test2'
+            const data = await this.db.validatePassword(username, password)
+            expect(data).toBe(false)
+            done()
+        })
     })
 
     describe('getAllSensorData()', () => {
