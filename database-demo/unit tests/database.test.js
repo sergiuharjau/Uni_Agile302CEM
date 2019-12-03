@@ -129,6 +129,22 @@ describe('Database', () => {
         })
     })
 
+    describe('logPirActivation()', () => {
+        test('pir sensor can log motion without error', async done => {
+            expect.assertions(1)
+            const sensorName = 'pir1'
+            const activated = true
+            const dateRecorded = new Date()
+            try {
+                await this.db.logPirActivation(sensorName, activated, dateRecorded)
+                expect(true).toBe(true)
+            } catch (error) {
+                expect(true).toBe(false)
+            }
+            done()
+        })
+    })
+
     describe('getAllSensorData()', () => {
         test('Error is thrown if username is null', async done => {
             expect.assertions(1)

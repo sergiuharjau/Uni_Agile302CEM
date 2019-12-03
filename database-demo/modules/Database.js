@@ -239,6 +239,24 @@ class database {
 						AND effect_to_date = '9999-12-31 23:59:59';`
 		return await this.db.run(sql)
 	}
+
+	/**
+	 * Logs whether the provided sensor was activated or not
+	 * @param {String} sensorName The name of the sensor
+	 * @param {Boolean} activated Whenther the sensor was activated/turned on
+	 * @param {Date} dateRecorded Date the reading was recorded
+	 */
+	async logPirActivation (sensorName, activated, dateRecorded) {
+		try {
+			const databaseDate = await getDateFormat(dateRecorded)
+			const sql = `INSERT INTO sensorStatus (sensorName, activated, dateRecorded) 
+						VALUES ('${sensorName}', ${activated}, '${databaseDate}');`
+			console.log(sql)
+			await this.db.run(sql)
+		} catch (error) {
+			throw error
+		}
+	}
 }
 
 /**
