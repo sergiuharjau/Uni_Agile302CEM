@@ -20,6 +20,32 @@ class database {
 	}
 
 	/**
+	 * Return true or false if the password entered 
+	 * is correct for the specified user.
+	 * @param {String} username The username the user has entered
+	 * @param {String} password The hashed version of the users entered password
+	 * @returns {Boolean} Returns true if the password matches the one stored in the database. Otherwise false
+	 */
+	async validatePassword (username, password){
+		const sql = `SELECT CASE WHEN EXISTS(SELECT 1
+										FROM users
+										WHERE username = '${username}'
+											AND password = '${password}')
+						THEN 1
+						ELSE 0
+					END as VALID`
+		const data = await this.db.all(sql)
+		console.log(data)
+		console.log(data[0].VALID)
+		console.log(typeof data[0].VALID)
+		if (data[0].VALID === 1) {
+			return true
+		} else {
+			return false
+		}
+	}
+
+	/**
 	 * Get all of the sensor data that the user had access to at anytime
 	 * @param {String} userName The username of the logged in user
 	 */

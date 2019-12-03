@@ -29,6 +29,17 @@ describe('Database', () => {
         })
     })
 
+    describe('validatePassword()', () => {
+        test('Return 0 if username is blank', async done => {
+            expect.assertions(1)
+            const username = null
+            const password = 'test'
+            const data = await this.db.validatePassword(username, password)
+            expect(data).toBe(false)
+            done()
+        }, 10000)
+    })
+
     describe('getAllSensorData()', () => {
         test('Error is thrown if username is null', async done => {
             expect.assertions(1)
