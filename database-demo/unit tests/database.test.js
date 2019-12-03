@@ -197,14 +197,14 @@ describe('Database', () => {
         })
     })
     
-    describe('getStatistics()', () => {
+    describe('getTempStatistics()', () => {
         test('Error is thrown if username is null', async done => {
             expect.assertions(1)
             const userName = null
             const sensorName = 'temp1'
             const startDate = new Date(2019,1,1,0,0,0)
             const endDate = new Date(2020,1,1,0,0,0)
-            await expect(this.db.getStatistics(userName,sensorName,startDate,endDate)).rejects.toEqual(Error('Please provide a username'))
+            await expect(this.db.getTemperatureStatistics(userName,sensorName,startDate,endDate)).rejects.toEqual(Error('Please provide a username'))
             done()
         })
 
@@ -214,7 +214,7 @@ describe('Database', () => {
             const sensorName = 'temp1'
             const startDate = new Date(2019,1,1,0,0,0)
             const endDate = new Date(2020,1,1,0,0,0)
-            await expect(this.db.getStatistics(userName,sensorName,startDate,endDate)).rejects.toEqual(Error('Please provide a username'))
+            await expect(this.db.getTemperatureStatistics(userName,sensorName,startDate,endDate)).rejects.toEqual(Error('Please provide a username'))
             done()
         })
 
@@ -224,7 +224,7 @@ describe('Database', () => {
             const sensorName = 'temp1'
             const startDate = new Date(2019,1,1,0,0,0)
             const endDate = new Date(2020,1,1,0,0,0)
-            await expect(this.db.getStatistics(userName,sensorName,startDate,endDate)).rejects.toEqual(Error('Please provide a username'))
+            await expect(this.db.getTemperatureStatistics(userName,sensorName,startDate,endDate)).rejects.toEqual(Error('Please provide a username'))
             done()
         })
 
@@ -234,7 +234,7 @@ describe('Database', () => {
             const sensorName = 'temp1'
             const startDate = '123'
             const endDate = new Date(2019,12,31,23,59,59)
-            await expect(this.db.getStatistics(userName,sensorName,startDate,endDate)).rejects.toEqual(Error('Please provide a valid start date'))
+            await expect(this.db.getTemperatureStatistics(userName,sensorName,startDate,endDate)).rejects.toEqual(Error('Please provide a valid start date'))
             done()
         })
 
@@ -244,7 +244,7 @@ describe('Database', () => {
             const sensorName = 'temp1'
             const startDate = new Date(2019,1,1,0,0,0)
             const endDate = '123'
-            await expect(this.db.getStatistics(userName,sensorName,startDate,endDate)).rejects.toEqual(Error('Please provide a valid end date') )
+            await expect(this.db.getTemperatureStatistics(userName,sensorName,startDate,endDate)).rejects.toEqual(Error('Please provide a valid end date') )
             done()
         })
 
@@ -254,7 +254,7 @@ describe('Database', () => {
             const sensorName = 'temp1'
             const startDate = new Date(2019,1,1,0,0,0)
             const endDate = new Date(2018,1,1,0,0,0)
-            await expect(this.db.getStatistics(userName,sensorName,startDate,endDate)).rejects.toEqual(Error('Please provide an endDate that is after the startDate'))
+            await expect(this.db.getTemperatureStatistics(userName,sensorName,startDate,endDate)).rejects.toEqual(Error('Please provide an endDate that is after the startDate'))
             done()
         })
 
@@ -264,7 +264,7 @@ describe('Database', () => {
             const sensorName = 'fakeName'
             const startDate = new Date(2019,1,1,0,0,0)
             const endDate = new Date(2020,1,1,0,0,0)
-            const data = await this.db.getStatistics(userName,sensorName,startDate,endDate)
+            const data = await this.db.getTemperatureStatistics(userName,sensorName,startDate,endDate)
             expect(data.length).toBe(0)
             done()
         })
@@ -275,7 +275,7 @@ describe('Database', () => {
             const sensorName = 'temp1'
             const startDate = null
             const endDate = null
-            const data = await this.db.getStatistics(userName,sensorName,startDate,endDate)
+            const data = await this.db.getTemperatureStatistics(userName,sensorName,startDate,endDate)
             expect(data.length).toBe(1)
             expect(data[0].sensorName).toBe('temp1')
             expect(data[0].location).toBe('Kitchen')
@@ -291,7 +291,7 @@ describe('Database', () => {
             const sensorName = null
             const startDate = null
             const endDate = null
-            const data = await this.db.getStatistics(userName,sensorName,startDate,endDate)
+            const data = await this.db.getTemperatureStatistics(userName,sensorName,startDate,endDate)
             expect(data.length).toBe(3)
             expect(data[0].sensorName).toBe('temp1')
             expect(data[0].location).toBe('Kitchen')

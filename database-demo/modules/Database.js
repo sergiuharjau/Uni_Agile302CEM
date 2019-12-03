@@ -128,7 +128,7 @@ class database {
 	 * @param {Date} startDate Optional: The start date of the range required. If startDate or endDate are null then all data will be returned regardles of time period 
 	 * @param {Date} endDate Optionall: The end date of the range requested. If startDate or endDate are null then all data will be returned regardles of time period
 	 */
-	async getStatistics(userName, sensorName, startDate, endDate) {
+	async getTemperatureStatistics(userName, sensorName, startDate, endDate) {
 		if (userName === null || userName === '' || typeof userName !== 'string') throw new Error('Please provide a username')
 		/*
 		Check using Object.prototype was found at the following site
@@ -164,6 +164,7 @@ class database {
 						INNER JOIN users u on u.userName = su.userName
 					WHERE u.userName = '${userName}'
 						AND d.dateRecorded BETWEEN su.EFFECT_FROM_DATE AND su.EFFECT_TO_DATE
+						AND se.type = 'Temperature'
 						AND ('${sensorName}' = 'null' OR se.sensorName = '${sensorName}')
 						AND (('${searchStartDate}' = 'null' OR '${searchEndDate}' = 'null') OR d.dateRecorded BETWEEN '${searchStartDate}' AND '${searchEndDate}')
 					GROUP BY se.sensorName;`
