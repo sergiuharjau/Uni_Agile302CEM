@@ -47,6 +47,15 @@ describe('Database', () => {
             expect(data).toBe(false)
             done()
         })
+
+        test('Return 0 if username is null', async done => {
+            expect.assertions(1)
+            const username = null
+            const password = 'test'
+            const data = await this.db.validatePassword(username, password)
+            expect(data).toBe(false)
+            done()
+        })
     })
 
     describe('getAllSensorData()', () => {
