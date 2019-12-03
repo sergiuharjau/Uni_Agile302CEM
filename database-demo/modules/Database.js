@@ -26,10 +26,10 @@ class database {
 	 */
 	async insertUser (username, password) {
 		try {
-			const sql = `INSERT INTO users(username, password) VALUES (${username}, ${password});`
+			const sql = `INSERT INTO users(username, password) VALUES ('${username}', '${password}');`
 			await this.db.run(sql)
 		} catch (err){
-			return err
+			throw err
 		}
 
 	}
@@ -47,7 +47,7 @@ class database {
 											AND password = '${password}')
 						THEN 1
 						ELSE 0
-					END as VALID`
+					END as VALID;`
 		const data = await this.db.all(sql)
 		if (data[0].VALID === 1) {
 			return true
