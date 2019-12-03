@@ -20,6 +20,45 @@ class database {
 	}
 
 	/**
+	 * Inserts a new user into the database
+	 * @param {String} username The username of the new user
+	 * @param {String} password The hashed password of the users inputted passowrd
+	 */
+	async insertUser (username, password) {
+		try {
+			const sql = `INSERT INTO users(username, password) VALUES ('${username}', '${password}');`
+			await this.db.run(sql)
+		} catch (err){
+			if(err.errno === 19) {
+				throw new Error(`${username} already exists.`)
+			}
+		}
+
+	}
+	/**
+	 * Return true or false if the password entered 
+	 * is correct for the specified user.
+	 * @param {String} username The username the user has entered
+	 * @param {String} password The hashed version of the users entered password
+	 * @returns {Boolean} Returns true if the password matches the one stored in the database. Otherwise false
+	 */
+	async validatePassword (username, password){
+		const sql = `SELECT CASE WHEN EXISTS(SELECT 1
+										FROM users
+										WHERE username = '${username}'
+											AND password = '${password}')
+						THEN 1
+						ELSE 0
+					END as VALID;`
+		const data = await this.db.all(sql)
+		if (data[0].VALID === 1) {
+			return true
+		} else {
+			return false
+		}
+	}
+
+	/**
 	 * Get all of the sensor data that the user had access to at anytime
 	 * @param {String} userName The username of the logged in user
 	 */

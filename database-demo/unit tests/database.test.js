@@ -29,6 +29,106 @@ describe('Database', () => {
         })
     })
 
+    describe('validatePassword()', () => {
+        test('Return 0 if username is blank', async done => {
+            expect.assertions(1)
+            const username = ''
+            const password = 'test'
+            const data = await this.db.validatePassword(username, password)
+            expect(data).toBe(false)
+            done()
+        })
+
+        test('Return 0 if password is blank', async done => {
+            expect.assertions(1)
+            const username = 'test'
+            const password = ''
+            const data = await this.db.validatePassword(username, password)
+            expect(data).toBe(false)
+            done()
+        })
+
+        test('Return 0 if username is null', async done => {
+            expect.assertions(1)
+            const username = null
+            const password = 'test'
+            const data = await this.db.validatePassword(username, password)
+            expect(data).toBe(false)
+            done()
+        })
+
+        test('Return 0 if password is null', async done => {
+            expect.assertions(1)
+            const username = 'test'
+            const password = null
+            const data = await this.db.validatePassword(username, password)
+            expect(data).toBe(false)
+            done()
+        })
+
+        test('Return 0 if username does not exist', async done => {
+            expect.assertions(1)
+            const username = 'randomusername'
+            const password = 'password'
+            const data = await this.db.validatePassword(username, password)
+            expect(data).toBe(false)
+            done()
+        })
+
+        test('Return 1 if password matches for provided user', async done => {
+            expect.assertions(1)
+            const username = 'test'
+            const password = 'test'
+            const data = await this.db.validatePassword(username, password)
+            expect(data).toBe(true)
+            done()
+        })
+
+        test('Return 0 if password provided matches a different user', async done => {
+            expect.assertions(1)
+            const username = 'test'
+            const password = 'test2'
+            const data = await this.db.validatePassword(username, password)
+            expect(data).toBe(false)
+            done()
+        })
+    })
+
+    describe('insertUser()', () => {
+        test('User can be inserted without error', async done => {
+            expect.assertions(1)
+            const username = 'user3'
+            const password = 'password3'
+
+            try {
+                await this.db.insertUser(username, password)
+                expect(true).toBe(true)
+            } catch (error) {
+                expect(true).toBe(false)
+            }
+            done()
+        })
+
+        test('Users password can be validated', async done => {
+            expect.assertions(1)
+            const username = 'user4'
+            const password = 'password4'
+            await this.db.insertUser(username, password)
+            const data = await this.db.validatePassword(username, password)
+            expect(data).toBe(true)
+            done()
+        })
+
+        test('Appropriate Error message if user already exists', async done => {
+            expect.assertions(1)
+            const username = 'user4'
+            const password = 'password4'
+            await expect(this.db.insertUser(username, password))
+                .rejects.toEqual(Error('user4 already exists.'))
+            done()
+        })
+    })
+
     describe('getAllSensorData()', () => {
         test('Error is thrown if username is null', async done => {
             expect.assertions(1)
