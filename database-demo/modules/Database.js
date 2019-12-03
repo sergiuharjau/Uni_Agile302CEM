@@ -20,6 +20,20 @@ class database {
 	}
 
 	/**
+	 * Inserts a new user into the database
+	 * @param {String} username The username of the new user
+	 * @param {String} password The hashed password of the users inputted passowrd
+	 */
+	async insertUser (username, password) {
+		try {
+			const sql = `INSERT INTO users(username, password) VALUES (${username}, ${password});`
+			await this.db.run(sql)
+		} catch (err){
+			return err
+		}
+
+	}
+	/**
 	 * Return true or false if the password entered 
 	 * is correct for the specified user.
 	 * @param {String} username The username the user has entered

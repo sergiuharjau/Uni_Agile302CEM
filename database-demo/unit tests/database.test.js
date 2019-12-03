@@ -94,6 +94,22 @@ describe('Database', () => {
         })
     })
 
+    describe('insertUser()', () => {
+        test('User can be inserted without error', async done => {
+            expect.assertions(1)
+            const username = 'user3'
+            const password = 'password3'
+
+            try {
+                await this.db.insertUser(username, password)
+                expect(true).toBe(true)
+            } catch (error) {
+                expect(true).toBe(false)
+            }
+            done()
+        })
+    })
+
     describe('getAllSensorData()', () => {
         test('Error is thrown if username is null', async done => {
             expect.assertions(1)
