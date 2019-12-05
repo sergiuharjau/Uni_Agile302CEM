@@ -177,11 +177,19 @@ describe('Database', () => {
             done()
         })
 
-        test('Check we can see a snesor as active', async done => {
+        test('Check we can see a sensor as active', async done => {
             expect.assertions(2)
             const data = await this.db.getCurrentSensorStatus()
             expect(data[0].sensorName).toBe('gas')
             expect(data[0].activated).toBe(1)
+            done()
+        })
+
+        test('Check we can see a sensor as inactive', async done => {
+            expect.assertions(2)
+            const data = await this.db.getCurrentSensorStatus()
+            expect(data[1].sensorName).toBe('pir1')
+            expect(data[1].activated).toBe(0)
             done()
         })
     })
