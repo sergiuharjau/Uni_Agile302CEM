@@ -14,8 +14,46 @@ class Capturing():
     @staticmethod
     def on_message(client, userdata, msg):
 #        print(msg.topic+":\n"+str(msg.payload.decode()))
+        sensorType = selectSensorType(msg.payload)
+
+        if sensorType == None or sensorName != 'Temperature':
+            insertSensorActivatedReading(msg.payload)
+
         Capturing.insertIntoSQL(msg.payload)
    
+    @staticmethod
+    def selectSensorType(jsonString):
+
+        try:
+            sql =  '''SELECT type
+                        FROM sensors
+                        WHERE sensorName = ?;'''
+
+            cur = Capturing.db.cursor()
+            data = json.loads(jsonString.decode())
+            name = data["label"]
+            cur.execute(sql, name)
+            record = cursor.fetchone()[0]
+
+            return record
+        except Error as e:
+            print("Sql error: ", e)
+    
+    @staticmethod
+    def insertSensorActivatedReading(jsonString):
+
+        try:
+            sql =  '''INSERT INTO sensorStatus(sensorName, activated, dateRecorded)
+                        VALUES(?,?,?); '''
+
+            cur = Capturing.db.cursor()
+            data = json.loads(jsonString.decode())
+            tuple = (data["label"], data["value"], data["time"])
+            cur.execute(sql, tuple)
+            cur.execute("COMMIT;")
+        except Error as e:
+            print("Sql error: ", e)
+
     @staticmethod
     def insertIntoSQL(jsonString):
 
