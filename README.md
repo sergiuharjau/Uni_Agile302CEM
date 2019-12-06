@@ -27,3 +27,7 @@ This will then be saved onto the local filesystem of the Raspberry PI, in a Mong
 The data stored locally will be used for various data analysis and logging which we will serve to the user.
 
 At the same time, the user can access the real time stream of data via MQTT over a websocket.
+
+## Servo
+
+The servo code is included in the Gyro. 
