@@ -41,7 +41,7 @@
     "sqlite-async": "^1.0.11",
     "tls": "0.0.1",
     "url": "^0.11.0",
-    "ws": "^7.1.2"
+    "ws": "^7.4.6"
   },
   "devDependencies": {
     "eslint": "^5.15.2",
